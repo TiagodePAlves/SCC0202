@@ -1,11 +1,14 @@
 # TOOLS
-CC = gcc
-CFLAGS = -std=c11
+CC ?= gcc
+# OPTIONS
+LEVEL ?= 3
+WARNINGS ?= -Wall -Werror -Wpedantic
+CFLAGS ?= -std=c11 $(WARNINGS) -O$(LEVEL)
 
 # SOURCE
-SRC = main.c
+SRC := main.c
 # ARTIFACT
-PROD = main
+PROD := main
 
 # GENERAL COMMANDS
 .PHONY: all run clean
@@ -15,8 +18,13 @@ all: $(PROD)
 run: all
 	./$(PROD)
 
+debug: LEVEL = 0
+debug: CFLAGS += -ggdb3 -DDEBUG
+debug: all
+
 clean:
 	rm -rf *.o $(PROD)
+
 
 # BUILDING
 $(PROD): $(SRC:.c=.o)
