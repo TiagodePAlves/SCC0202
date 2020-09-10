@@ -2,8 +2,9 @@
 CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
+DEBUG ?= -DNDEBUG
 WARNINGS ?= -Wall -Werror -Wpedantic
-CFLAGS ?= -std=c11 $(WARNINGS) -O$(LEVEL)
+CFLAGS ?= -std=c11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
 SRC := main.c
@@ -19,7 +20,8 @@ run: all
 	./$(PROD)
 
 debug: LEVEL = 0
-debug: CFLAGS += -ggdb3 -DDEBUG
+debug: DEBUG = -DDEBUG
+debug: CFLAGS += -ggdb3
 debug: all
 
 clean:
