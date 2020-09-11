@@ -7,7 +7,7 @@ WARNINGS ?= -Wall -Werror -Wpedantic
 CFLAGS ?= -std=c11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
-SRC := main.c
+SRC := main.c subst.c
 # ARTIFACT
 PROD := main
 
