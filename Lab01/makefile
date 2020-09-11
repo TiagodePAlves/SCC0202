@@ -16,7 +16,7 @@ PROD := main
 
 all: $(PROD)
 
-run: all
+run: $(PROD)
 	./$(PROD)
 
 zip: 01.zip
