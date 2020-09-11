@@ -12,12 +12,14 @@ SRC := main.c subst.c
 PROD := main
 
 # GENERAL COMMANDS
-.PHONY: all run clean
+.PHONY: all run clean debug zip
 
 all: $(PROD)
 
 run: all
 	./$(PROD)
+
+zip: 01.zip
 
 debug: LEVEL = 0
 debug: DEBUG = -DDEBUG
@@ -25,7 +27,10 @@ debug: CFLAGS += -ggdb3
 debug: all
 
 clean:
-	rm -rf *.o $(PROD)
+	rm -rf *.o $(PROD) *.zip
+
+%.zip: makefile $(SRC) $(wildcard *.h)
+	zip -J $@ $^
 
 
 # BUILDING
