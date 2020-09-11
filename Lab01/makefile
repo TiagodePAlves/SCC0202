@@ -30,7 +30,7 @@ clean:
 
 # BUILDING
 $(PROD): $(SRC:.c=.o)
-	gcc $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
