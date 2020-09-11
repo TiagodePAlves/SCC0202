@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 pattern_t read_pattern_line(void) {
@@ -16,52 +17,61 @@ pattern_t read_pattern_line(void) {
     return pat;
 }
 
-#define MAX_SUB 128
 
-
-
-static inline
-unsigned substite_same_size(
-    char * restrict text, const size_t limit,
-    const pattern_t search, const pattern_t subst,
-    const size_t subst_size
-) {
-
-    unsigned count = 0;
-
-    // search substrings
-    char *ptr = text;
-    while ((ptr = strstr(ptr, search.str)) != NULL) {
-        // function description requires this
-        if (count >= MAX_SUB) {
-            return count;
-        }
-
-        // valid write since 'search' and 'subst' have the same size
-        memcpy(ptr, subst.str, subst_size);
-
-        count += 1;
-    }
-
-    return count;
-}
-
-#define todo() \
-    printf("todo!\n"); \
-    exit(10)
-
-unsigned pattern_substituition(char *text, const pattern_t search, const pattern_t subst, const size_t max) {
+unsigned pattern_substituition(char *text, const pattern_t search, const pattern_t subst, const size_t size) {
     // sanity check
     assert(text != NULL);
 
     const size_t search_len = strlen(search.str);
     const size_t subst_len = strlen(subst.str);
+    size_t text_len = strlen(text);
+    // sanity check
+    assert(text_len <= size);
 
-    if (search_len < subst_len) {
-        todo();
-    } else if (search_len > subst_len) {
-        todo();
-    } else {
-        return substite_same_size(text, max, search, subst, subst_len);
+    unsigned count = 0;
+    // search substrings
+    char *match = text;
+    while ((match = strstr(match, search.str)) != NULL) {
+
+        if (search_len < subst_len) {
+            // difference in size when substituted
+            const size_t diff = subst_len - search_len;
+            // position of the start of the match
+            // SAFETY: when nonnull, 'ptr' is greater or equals to 'text'
+            const size_t pos = (size_t) match - (size_t) text;
+
+            // number of bytes to copy
+            size_t nbytes = text_len - (pos + search_len);
+            // do not overflow buffer when moving
+            if (text_len + diff > size) {
+                nbytes -= text_len + diff - size;
+            }
+            // move the bytes after the match until the end of the text, plus null byte
+            memmove(match + subst_len, match + search_len, nbytes);
+
+            // update text length
+            text_len = min(text_len + diff, size);
+        }
+        // substite matched pattern
+        memcpy(match, subst.str, subst_len);
+
+        if (search_len > subst_len) {
+            // position of the start of the match
+            const size_t pos = (size_t) match - (size_t) text;
+            // move the bytes after the match until the end of the buffer, plus null
+            memmove(match + subst_len, match + search_len, text_len - (pos + search_len));
+
+            // update text length
+            text_len -= search_len - subst_len;
+        }
+
+        // start again after the matched substring
+        match += subst_len;
+        // update null byte
+        text[text_len] = '\0';
+        // and mark subtituted
+        count += 1;
     }
+
+    return count;
 }

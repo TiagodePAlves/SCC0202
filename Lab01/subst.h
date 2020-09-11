@@ -18,18 +18,20 @@ typedef struct pattern {
 pattern_t read_pattern_line(void);
 
 /* Subtitutes all matches of `search` by `subst` in `text`.
- * Returns number of times substituted.
+ * Returns number of matches substituted.
  *
- * This is limited to 128 substituitions.
+ * `text` must be null-terminated, patterns strings must be
+ * different and also null-terminated.
  *
- * At most, `max` characters are written in `text`, plus
- * the null byte.
+ * At most, `size` characters are written in `text`, plus
+ * the null byte, so the buffer must be able to hold
+ * `size + 1` bytes.
  */
 unsigned pattern_substituition(
     char * text,
     const pattern_t search,
     const pattern_t subst,
-    const size_t max
+    const size_t size
 )
 attribute(nonnull(1));
 
