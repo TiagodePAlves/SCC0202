@@ -15,7 +15,7 @@ int main(void) {
         const pattern_t pat = read_pattern_line();
         const pattern_t sub = read_pattern_line();
 
-        pattern_substituition(line, pat, sub);
+        pattern_substituition(line, pat, sub, BUF_SIZE + 1);
 
         printf("%s\n", line);
     }

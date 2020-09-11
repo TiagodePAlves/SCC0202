@@ -27,4 +27,14 @@
 /* Compiler attributes declaration. */
 #define attribute(...) __attribute__((__VA_ARGS__))
 
+
+/* Gets the maximum of two integers. */
+#define max(x, y) \
+    (((x) >= (y))? (x) : (y))
+
+/* Gets the minimum of two integers. */
+#define min(x, y) \
+    (((x) <= (y))? (x) : (y))
+
+
 #endif/*__UTILS_H__*/
