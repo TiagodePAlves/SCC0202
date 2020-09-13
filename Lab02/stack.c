@@ -222,13 +222,13 @@ bool stack_push(stack_t * restrict stack, const void * restrict elem) {
 }
 
 attribute(pure, nonnull)
-void *stack_peek(const stack_t * restrict stack) {
+void *stack_peek(const_stack_t stack) {
     assert(stack != NULL);
 
-    if (unlikely(empty(*stack))) {
+    if (unlikely(empty(stack))) {
         return NULL;
     }
-    return get_elem(*stack, (*stack)->len-1);
+    return get_elem(stack, stack->len-1);
 }
 
 attribute(nonnull)

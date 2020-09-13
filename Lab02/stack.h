@@ -57,7 +57,7 @@ attribute(nonnull);
 /* Get reference to the top element on the stack.
  * Returns `NULL` when stack is empty.
  */
-void *stack_peek(const stack_t * restrict stack)
+void *stack_peek(const_stack_t stack)
 attribute(pure, nonnull);
 
 /* Pop top element from the stack.
