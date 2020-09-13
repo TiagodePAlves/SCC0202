@@ -22,12 +22,12 @@
  * On non-debug builds this casts variable as `void`, to mark as unused.
  */
 #define assert_expr(variable, expr) \
-    assert((expr))
+    assert(expr)
 #else
 // Change behaviour on non-debug builds to avoid unused errors
 #define assert_eq(variable, expected) \
     (void) variable
-#define assert_expr(variable) \
+#define assert_expr(variable, expr) \
     (void) variable
 #endif
 
