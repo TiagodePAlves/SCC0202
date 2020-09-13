@@ -3,6 +3,7 @@
 #define __UTILS_H__
 
 #include <assert.h>
+#include <stdint.h>
 
 
 // https://gcc.gnu.org/onlinedocs/gcc-4.8.5/cpp/Stringification.html
@@ -36,5 +37,15 @@
 #define min(x, y) \
     (((x) <= (y))? (x) : (y))
 
+
+/* Type representing 1 byte of data. */
+typedef uint8_t byte_t;
+
+
+// branch hints
+/* Indicates that braching is likely to happen. */
+#define likely(x)   __builtin_expect((x), 1)
+/* Indicates unlikely branches, useful for error checking. */
+#define unlikely(x) __builtin_expect((x), 0)
 
 #endif/*__UTILS_H__*/
