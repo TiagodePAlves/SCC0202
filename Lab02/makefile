@@ -9,7 +9,8 @@ CFLAGS ?= -std=c11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 # SOURCE
 SRC := main.c stack.c
 # ARTIFACT
-PROD := main
+PROD  := main
+OPTIM := optimized
 
 # GENERAL COMMANDS
 .PHONY: all run clean debug zip
@@ -29,7 +30,7 @@ debug: clean all
 clean:
 	rm -rf *.o $(PROD) *.zip
 
-%.zip: makefile $(SRC) $(wildcard *.h)
+%.zip: makefile $(SRC) $(wildcard *.h) $(OPTIM).c
 	zip -J $@ $^
 
 
@@ -39,3 +40,6 @@ $(PROD): $(SRC:.c=.o)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OPTIM): $(OPTIM).c
+	$(CC) $(CFLAGS) $@.c -o $@
