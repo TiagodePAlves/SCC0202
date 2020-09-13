@@ -87,16 +87,38 @@ size_t next_capacity(size_t current) {
     }
 }
 
-// Creates the stack
-stack_t stack_new(size_t elem_size) {
-    stack_t new = malloc(size_for(elem_size, INITIAL_CAPACITY));
+static inline
+// Creates stack with given capacity
+stack_t new(size_t elem_size, size_t capacity) {
+    stack_t new = malloc(size_for(elem_size, capacity));
     if (unlikely(new == NULL)) {
         return NULL;
     }
-    new->cap = INITIAL_CAPACITY;
+    new->cap = capacity;
     new->len = 0;
     new->elem_size = elem_size;
     return new;
+}
+
+// Creates the default stack
+stack_t stack_new(size_t elem_size) {
+    return new(elem_size, INITIAL_CAPACITY);
+}
+
+// Copies elements from array into a new stack
+attribute(nonnull)
+stack_t stack_from_array(const void *array, size_t elem_size, size_t length) {
+    assert(array != NULL);
+
+    size_t capacity = max(length, INITIAL_CAPACITY);
+    stack_t stack = new(elem_size, capacity);
+    if (unlikely(stack == NULL)) {
+        return NULL;
+    }
+    memcpy(stack->data, array, elem_size * length);
+    stack->len = length;
+
+    return stack;
 }
 
 static inline attribute(nonnull)
@@ -118,7 +140,7 @@ stack_t grow(stack_t stack) {
 static inline attribute(nonnull)
 // Reduces stack capacity, moving to another pointer
 //
-// NOTE: Doesn't update stack length, so this must be checked before shrinking
+// NOTE: Doesn't update stack length, that must be checked before shrinking
 stack_t shrink(stack_t stack) {
     assert(stack != NULL);
 
@@ -165,6 +187,7 @@ attribute(nonnull)
 bool stack_push(stack_t * restrict stack, const void * restrict elem) {
     assert(stack != NULL);
 
+    // tries growing space when full
     if (unlikely(full(*stack))) {
         stack_t new = grow(*stack);
         if (unlikely(new == NULL)) {
@@ -196,6 +219,7 @@ bool stack_pop(stack_t * restrict stack, void * restrict elem) {
     }
     read(*stack, --(*stack)->len, elem);
 
+    // tries to shrink unused memory
     if (unlikely(low_usage(*stack))) {
         stack_t new = shrink(*stack);
         if (likely(new != NULL)) {

@@ -21,6 +21,18 @@ typedef const struct stack *const_stack_t;
  */
 stack_t stack_new(size_t elem_size);
 
+/* Creates a new stack from an array of `length` with elements of
+ * `elem_size`.
+ *
+ * The array pointer should never be `NULL`, not even for an empty
+ * array.
+ *
+ * The array is considered in increasing order, that is, the last
+ * element of the array will be the top of the stack.
+ */
+stack_t stack_from_array(const void *array, size_t elem_size, size_t length)
+attribute(nonnull);
+
 /* Checks that a stack is empty. */
 bool stack_empty(const_stack_t stack)
 attribute(pure, nonnull);
