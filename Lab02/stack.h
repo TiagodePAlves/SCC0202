@@ -21,6 +21,10 @@ typedef const struct stack *const_stack_t;
  */
 stack_t stack_new(size_t elem_size);
 
+/* Free memory used by stack. */
+void stack_free(stack_t stack)
+attribute(nonnull);
+
 /* Creates a new stack from an array of `length` with elements of
  * `elem_size`.
  *
@@ -69,4 +73,13 @@ attribute(pure, nonnull);
  * allocated memory may be shrunk.
  */
 bool stack_pop(stack_t * restrict stack, void * restrict elem)
+attribute(nonnull);
+
+/* Invert stack order inplace.
+ *
+ * This may require allocation of a small temporary buffer, which
+ * may lead to unsuccessfull operation. For stacks with `elem_size`
+ * less than or equals to 32 bytes, this will never happen.
+ */
+bool stack_invert(stack_t stack)
 attribute(nonnull);

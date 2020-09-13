@@ -105,6 +105,19 @@ stack_t stack_new(size_t elem_size) {
     return new(elem_size, INITIAL_CAPACITY);
 }
 
+attribute(nonnull)
+// Free stack memory
+void stack_free(stack_t stack) {
+#ifdef DEBUG
+    // making read-after-free more prone to bug
+    assert(stack != NULL);
+    stack->cap = 0;
+    stack->len = 0;
+    stack->elem_size = 0;
+#endif
+    free(stack);
+}
+
 // Copies elements from array into a new stack
 attribute(nonnull)
 stack_t stack_from_array(const void *array, size_t elem_size, size_t length) {
@@ -180,6 +193,14 @@ void write(stack_t restrict stack, size_t pos, const void * restrict elem) {
     memcpy(get_elem(stack, pos), elem, stack->elem_size);
 }
 
+static inline attribute(nonnull)
+// Move `elem` at position `from` on the stack to position `to`, overwriting values.
+// Positions must be distinct.
+void move(stack_t stack, size_t from, size_t to) {
+    assert(from != to);
+    memcpy(get_elem(stack, to), get_elem(stack, from), stack->elem_size);
+}
+
 /* * * * * * * * * * *
  * Stack operations  */
 
@@ -226,5 +247,44 @@ bool stack_pop(stack_t * restrict stack, void * restrict elem) {
             *stack = new;
         }
     }
+    return true;
+}
+
+static inline attribute(nonnull)
+// Invert stack with given buffer.
+void invert_with(stack_t restrict stack, void * restrict tmp) {
+    for (size_t i = 0; i < stack->len / 2; i++) {
+        size_t inv = stack->len - i - 1;
+
+        read(stack, i, tmp);
+        move(stack, inv, i);
+        write(stack, inv, tmp);
+    }
+}
+
+static inline attribute(nonnull)
+// Invert stack with small (up to 32 bytes) `elem_size`.
+void invert_small(stack_t stack) {
+    byte_t tmp[32];
+    invert_with(stack, tmp);
+}
+
+attribute(nonnull)
+// Optimized stack order inversion.
+bool stack_invert(stack_t stack) {
+    assert(stack != NULL);
+
+    if (stack->elem_size <= 32) {
+        invert_small(stack);
+        return true;
+    }
+
+    void *tmp = malloc(stack->elem_size);
+    if (unlikely(tmp == NULL)) {
+        return false;
+    }
+    invert_with(stack, tmp);
+
+    free(tmp);
     return true;
 }
