@@ -1,3 +1,7 @@
+#ifndef __STACK_H__
+/* Generic contiguous stack implementation. */
+#define __STACK_H__
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -83,3 +87,5 @@ attribute(nonnull);
  */
 bool stack_invert(stack_t stack)
 attribute(nonnull);
+
+#endif//__STACK_H__
