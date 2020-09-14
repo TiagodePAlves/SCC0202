@@ -1,12 +1,11 @@
 #include "stack.h"
-#include <stddef.h>
-#include <stdint.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <string.h>
 
 
 // Initial capacity for a new stack.
-#define INITIAL_CAPACITY 64
+#define INITIAL_CAPACITY 64ULL
 
 
 struct stack {

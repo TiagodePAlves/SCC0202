@@ -2,9 +2,8 @@
 /* Generic contiguous stack implementation. */
 #define __STACK_H__
 
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include "utils.h"
 
 /* Stack as a pointer type. */
