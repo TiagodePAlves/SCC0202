@@ -42,4 +42,4 @@ $(PROD): $(SRC:.c=.o)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OPTIM): $(OPTIM).c
-	$(CC) $(CFLAGS) $@.c -o $@
+	$(CC) $(CFLAGS) $< -o $@
