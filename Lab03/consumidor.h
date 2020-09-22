@@ -50,5 +50,10 @@ attribute(nonnull);
 bool consumidor_fila_vazia(const fila_t *fila)
 attribute(pure, nonnull);
 
+void consumidor_fila_insere(fila_t *restrict fila, consumidor_t *restrict novo)
+attribute(nonnull);
+
+bool consumidor_fila_remove(fila_t *restrict fila, consumidor_t *restrict *consumidor)
+attribute(nonnull);
 
 #endif//__CONSUMIDOR_H__

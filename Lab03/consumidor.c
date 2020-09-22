@@ -22,7 +22,7 @@ consumidor_t *consumidor_novo(const char nome[], uint8_t idade, bool agravante) 
     size_t len = strlen(nome);
 
     struct consumidor *novo = malloc(tam_bytes_consumidor(len));
-    if (novo != NULL) {
+    if (novo == NULL) {
         erro("Erro de alocação");
         return NULL;
     }
@@ -80,7 +80,7 @@ void consumidor_fila_insere(fila_t *restrict fila, consumidor_t *restrict novo) 
 
 attribute(nonnull)
 bool consumidor_fila_remove(fila_t *restrict fila, consumidor_t *restrict *consumidor) {
-    for (size_t grp = GRUPOS; grp > 0; grp++) {
+    for (size_t grp = GRUPOS; grp > 0; grp--) {
         fila_t *cur = fila_vetor_pos(fila, grp-1);
 
         if (fila_remove(cur, (void **) consumidor)) {
