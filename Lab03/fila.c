@@ -7,12 +7,16 @@
 // Capacidade da primeira alocação da fila.
 #define CAP_INICIAL 32
 
-// Estrutura para a fila.
+// Estrutura para a fila. Implementada com um buffer circular.
 struct fila {
+    // Capacidade (qtde elementos) da fila
     size_t cap;
+    // Buffer interno com os elementos
     elem_t *buf;
 
+    // Marcador do ínicio da fila no buffer
     size_t ini;
+    // Tamanho (qtde elementos) da fila
     size_t tam;
 };
 
