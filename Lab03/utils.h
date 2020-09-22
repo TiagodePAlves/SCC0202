@@ -23,5 +23,8 @@ _Noreturn
 void _error_exit(const char *restrict msg, const char *restrict arquivo, int linha)
 attribute(nonnull, noreturn);
 
+// Inteiro de 8 bits sem sinal.
+typedef unsigned char uint8_t;
+// pode ter outra largura, mas é pelo menos 8 bits
 
 #endif //__UTILS_H__
