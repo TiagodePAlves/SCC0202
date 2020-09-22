@@ -8,7 +8,7 @@
 // Estrutura para a fila.
 typedef struct fila fila_t;
 // Tipo dos elementos da fila.
-typedef unsigned elem_t;
+typedef void *elem_t;
 
 
 // Lista de atributos da função.
@@ -20,9 +20,12 @@ typedef unsigned elem_t;
 // Aborta em caso de erro de alocação, nunca retornando null.
 fila_t *fila_nova(void);
 
-// Desaloca toda memória da fila.
-void fila_destroi(fila_t *fila)
-attribute(nonnull);
+// Desaloca toda memória da fila com o `destrutor` para cada
+// elemento.
+// Destrutor pode ser NULL, indicando que não há necessidade
+// de cuidar da memória de cada elemento.
+void fila_destroi(fila_t *fila, void (*destrutor)(elem_t))
+attribute(nonnull(1));
 
 // Teste de fila vazia.
 bool fila_vazia(const fila_t *fila)

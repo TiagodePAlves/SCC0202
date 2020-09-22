@@ -49,10 +49,42 @@ fila_t *fila_nova(void) {
     return nova;
 }
 
-attribute(nonnull)
+typedef void destrutor_t(elem_t);
+
+// subtração limitada no zero
+#define saturating_sub(a, b) \
+    (((a) > (b))? (a) - (b) : 0)
+
+static inline attribute(nonnull(1))
+// Desaloca cada elemento do buffer.
+void elem_destroi(elem_t *elem, size_t cap, size_t tam, size_t ini, destrutor_t destroi) {
+    // sem função para aplicar
+    if (destroi == NULL) {
+        return;
+    }
+    // quantidade de elementos no início do buffer
+    size_t ini_tam = saturating_sub(ini + tam, cap);
+
+    // desaloca do ínicio do buffer
+    for (size_t i = 0; i < ini_tam; i++) {
+        destroi(elem[i]);
+    }
+    // e do final do buffer
+    for (size_t i = ini; i < cap; i++) {
+        destroi(elem[i]);
+    }
+}
+
+attribute(nonnull(1))
 // Desaloca a fila.
-void fila_destroi(fila_t *fila) {
+void fila_destroi(fila_t *fila, destrutor_t destrutor) {
     if (fila->buf != NULL) {
+        // destroi o buffer se não vazio
+        elem_destroi(
+            fila->buf, fila->cap,
+            fila->tam, fila->ini,
+            destrutor
+        );
         free(fila->buf);
     }
 
@@ -116,7 +148,8 @@ void fila_insere(fila_t *fila, elem_t elem) {
     }
 
     // nova posição no final da fila
-    size_t fim = fila->tam % fila->cap;
+    // ini + tam só pode dar overflow se sizeof(elem_t) == 1
+    size_t fim = (fila->ini + fila->tam) % fila->cap;
     fila->buf[fim] = elem;
 
     fila->tam++;
