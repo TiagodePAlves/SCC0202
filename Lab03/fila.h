@@ -3,6 +3,7 @@
 #define __FILA_H__
 
 #include "utils.h"
+#include <stdlib.h>
 
 
 // Estrutura para a fila.
