@@ -4,10 +4,10 @@ CC ?= gcc
 LEVEL ?= 3
 DEBUG ?= -DNDEBUG
 WARNINGS ?= -Wall -Werror -Wpedantic
-CFLAGS ?= -std=c11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
+CFLAGS ?= -std=gnu17 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
-SRC := main.c
+SRC := main.c fila.c
 # ARTIFACT
 PROD := main
 LAB  := 03
