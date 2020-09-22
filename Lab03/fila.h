@@ -36,6 +36,10 @@ attribute(pure, nonnull);
 bool fila_cheia(const fila_t *fila)
 attribute(pure, nonnull);
 
+// Acesso em um vetor de filas.
+fila_t *fila_vetor_pos(const fila_t *fila, size_t pos)
+attribute(const);
+
 // Insere novo elemento no final da fila.
 // Aborta em caso de erro ao aumentar o buffer.
 void fila_insere(fila_t *fila, elem_t elem)

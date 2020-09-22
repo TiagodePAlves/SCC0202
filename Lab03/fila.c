@@ -115,6 +115,12 @@ bool fila_cheia(const fila_t *fila) {
     return fila->tam == fila->cap;
 }
 
+attribute(const)
+// Acesso em um vetor de filas.
+fila_t *fila_vetor_pos(const fila_t *fila, size_t pos) {
+    return &fila[pos];
+}
+
 /** * * * * * * * * * * * **/
 /** Operações com a fila. **/
 
@@ -142,7 +148,7 @@ void aumenta_cap_fila(fila_t *fila) {
     fila->cap = new_cap;
 
     // move os elementos iniciais para o final do novo buffer
-    memcpy(fila->buf + old_cap, fila->buf, fila->ini * sizeof(elem_t));
+    memcpy(&(fila->buf[old_cap]), fila->buf, fila->ini * sizeof(elem_t));
 }
 
 
