@@ -7,13 +7,6 @@
 // Capacidade da primeira alocação da fila.
 #define CAP_INICIAL 32
 
-// Acusa erro e aborta (com segurança) o programa.
-#define erro(msg) \
-    fprintf(stderr,                         \
-        "%s: arquivo \"%s\", linha %d\n",  \
-        msg, __FILE__, __LINE__);           \
-    exit(1)
-
 // Estrutura para a fila.
 struct fila {
     size_t cap;
@@ -136,7 +129,7 @@ void aumenta_cap_fila(fila_t *fila) {
     fila->cap = new_cap;
 
     // move os elementos iniciais para o final do novo buffer
-    memcpy(fila->buf + old_cap, fila->buf, fila->ini);
+    memcpy(fila->buf + old_cap, fila->buf, fila->ini * sizeof(elem_t));
 }
 
 

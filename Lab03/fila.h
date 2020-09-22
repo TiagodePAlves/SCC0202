@@ -2,7 +2,7 @@
 /* Implementação da fila. */
 #define __FILA_H__
 
-#include "bool.h"
+#include "utils.h"
 
 
 // Estrutura para a fila.
@@ -10,11 +10,6 @@ typedef struct fila fila_t;
 // Tipo dos elementos da fila.
 typedef void *elem_t;
 
-
-// Lista de atributos da função.
-#define attribute(...) __attribute__((__VA_ARGS__))
-// Acesso restrito pelo ponteiro.
-#define restrict __restrict__
 
 // Aloca nova fila no heap e retorna o endereço dela.
 // Aborta em caso de erro de alocação, nunca retornando null.
