@@ -15,6 +15,11 @@ typedef void *elem_t;
 // Aborta em caso de erro de alocação, nunca retornando null.
 fila_t *fila_nova(void);
 
+// Aloca um vetor de novas filas e retorna o endereço do vetor.
+// Aborta em caso de erro de alocação, nunca retornando null.
+// Um vetor de tamanho zero é considerado inválido também.
+fila_t *fila_vetor_novo(size_t N);
+
 // Desaloca toda memória da fila com o `destrutor` para cada
 // elemento.
 // Destrutor pode ser NULL, indicando que não há necessidade

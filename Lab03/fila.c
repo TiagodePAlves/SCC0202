@@ -36,15 +36,24 @@ fila_t nova_fila_vazia(void) {
 
 // Aloca nova fila.
 fila_t *fila_nova(void) {
-    fila_t *nova = malloc(sizeof(struct fila));
-    if (nova == NULL) {
+    return fila_vetor_novo(1);
+}
+
+// Aloca um vetor de novas filas.
+fila_t *fila_vetor_novo(size_t N) {
+    fila_t *novos = reallocarray(NULL, N, sizeof(struct fila));
+    if (novos == NULL) {
         erro("Erro de alocação");
         return NULL;
     }
 
-    *nova = nova_fila_vazia();
-    return nova;
+    // poderia usar o `calloc()` ou `memset()` aqui
+    for (size_t i = 0; i < N; i++) {
+        novos[i] = nova_fila_vazia();
+    }
+    return novos;
 }
+
 
 typedef void destrutor_t(elem_t);
 
