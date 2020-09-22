@@ -42,13 +42,13 @@ attribute(const);
 
 // Insere novo elemento no final da fila.
 // Aborta em caso de erro ao aumentar o buffer.
-void fila_insere(fila_t *fila, elem_t elem)
+void fila_insere(fila_t *fila, elem_t restrict elem)
 attribute(nonnull);
 
 // Tenta remover um elemento do início da fila.
 // Quando a lista está vazia, é retornado falso e não
 // ocorre nenhum tipo de acesso em `elem`.
-bool fila_remove(fila_t *restrict fila, elem_t *restrict elem)
+bool fila_remove(fila_t *restrict fila, elem_t restrict *elem)
 attribute(nonnull);
 
 #endif//__FILA_H__

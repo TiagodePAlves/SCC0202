@@ -118,7 +118,7 @@ bool fila_cheia(const fila_t *fila) {
 attribute(const)
 // Acesso em um vetor de filas.
 fila_t *fila_vetor_pos(const fila_t *fila, size_t pos) {
-    return &fila[pos];
+    return (fila_t *) &fila[pos];
 }
 
 /** * * * * * * * * * * * **/
@@ -154,7 +154,7 @@ void aumenta_cap_fila(fila_t *fila) {
 
 attribute(nonnull)
 // Insere no final da fila.
-void fila_insere(fila_t *fila, elem_t elem) {
+void fila_insere(fila_t *fila, elem_t restrict elem) {
     if (fila_cheia(fila)) {
         aumenta_cap_fila(fila);
     }
@@ -169,7 +169,7 @@ void fila_insere(fila_t *fila, elem_t elem) {
 
 attribute(nonnull)
 // Remove do começo da fila.
-bool fila_remove(fila_t *restrict fila, elem_t *restrict elem) {
+bool fila_remove(fila_t *restrict fila, elem_t restrict *elem) {
     if (fila_vazia(fila)) {
         return false;
     }
