@@ -37,9 +37,9 @@ consumidor_t *consumidor_novo(const char nome[], uint8_t idade, bool agravante) 
 attribute(pure, nonnull)
 // Decisão do grupo ao qual o consumidor pertence.
 grupo_t consumidor_grupo(consumidor_t *consumidor) {
-    // poderia ser '(idade >= 60) << 1';
-    grupo_t idosa = (consumidor->idade >= 60)? IDOSA : COMUM;
     // ternário não é necessário aqui, mas é mais explicito
+    grupo_t idosa = (consumidor->idade >= 60)? IDOSA : COMUM;
+    // poderia ser 'agravante << 1';
     grupo_t agravante = consumidor->agravante? AGRAVANTE : COMUM;
 
     return idosa | agravante;

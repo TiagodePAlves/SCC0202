@@ -21,10 +21,10 @@ typedef enum grupo {
 
     // Consumidor não idoso e sem agravante de saúde
     COMUM               = 0,
-    // Consumidor não idoso, mas com agravante
-    AGRAVANTE           = 1,
     // Consumidor idoso, mas sem agravante
-    IDOSA               = 2,
+    IDOSA               = 1,
+    // Consumidor não idoso, mas com agravante
+    AGRAVANTE           = 2,
     // Consumidor idoso e com agravante de saúde
     IDOSA_COM_AGRAVANTE = 3
 } grupo_t;
