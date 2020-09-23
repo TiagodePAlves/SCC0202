@@ -51,7 +51,11 @@ fila_t *consumidor_fila_nova(void) {
 attribute(nonnull)
 // Desaloca memória da fila de consumidores.
 void consumidor_fila_destroi(fila_t *fila) {
-    fila_destroi(fila, free);
+    for (size_t i = 0; i < GRUPOS; i++) {
+        fila_t *cur = fila_vetor_pos(fila, i);
+        fila_destroi(cur, free);
+    }
+    free(fila);
 }
 
 

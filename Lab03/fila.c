@@ -1,6 +1,5 @@
 #include "fila.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 
@@ -54,7 +53,7 @@ fila_t *fila_vetor_novo(size_t N) {
 
 typedef void destrutor_t(elem_t);
 
-// subtração limitada no zero
+// Subtração limitada no zero
 #define saturating_sub(a, b) \
     (((a) > (b))? (a) - (b) : 0)
 
@@ -67,13 +66,15 @@ void elem_destroi(elem_t *elem, size_t cap, size_t tam, size_t ini, destrutor_t 
     }
     // quantidade de elementos no início do buffer
     size_t ini_tam = saturating_sub(ini + tam, cap);
+    // e no final do buffer
+    size_t end_tam = ini + tam - ini_tam;
 
     // desaloca do ínicio do buffer
     for (size_t i = 0; i < ini_tam; i++) {
         destroi(elem[i]);
     }
     // e do final do buffer
-    for (size_t i = ini; i < cap; i++) {
+    for (size_t i = ini; i < end_tam; i++) {
         destroi(elem[i]);
     }
 }
@@ -94,7 +95,6 @@ void fila_destroi(fila_t *fila, destrutor_t destrutor) {
     // remonta como vazia para evitar
     // acesso depois do free
     *fila = nova_fila_vazia();
-    free(fila);
 }
 
 /** * * * * * * * * * * * * * * * **/
