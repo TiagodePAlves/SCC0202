@@ -40,8 +40,9 @@ fila_t *fila_nova(void) {
 
 // Aloca um vetor de novas filas.
 fila_t *fila_vetor_novo(size_t N) {
-    fila_t *novos = reallocarray(NULL, N, sizeof(struct fila));
+    fila_t *novos = malloc(N * sizeof(struct fila));
     // assume que não ocorre problema de alocação
+    // nem de overflow na multiplicação
 
     // poderia usar o `calloc()` ou `memset()` aqui
     for (size_t i = 0; i < N; i++) {
@@ -136,8 +137,9 @@ void aumenta_cap_fila(fila_t *fila) {
     }
 
     // ajusta a capacidade do buffer
-    elem_t *buf = reallocarray(fila->buf, new_cap, sizeof(elem_t));
+    elem_t *buf = realloc(fila->buf, new_cap * sizeof(elem_t));
     // assume que não ocorre problema de alocação
+    // nem de overflow na multiplicação
     fila->buf = buf;
     fila->cap = new_cap;
 
