@@ -1,5 +1,5 @@
 #ifndef __FILA_H__
-/* Implementação da fila. */
+/* Implementação de uma fila (FIFO) simples. */
 #define __FILA_H__
 
 #include "utils.h"

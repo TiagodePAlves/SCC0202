@@ -73,20 +73,29 @@ bool consumidor_fila_vazia(const fila_t *fila) {
 }
 
 attribute(nonnull)
+// Insere consumidor na fila de espera.
 void consumidor_fila_insere(fila_t *restrict fila, consumidor_t *restrict novo) {
+    // escolhe o grupo
     grupo_t grp = consumidor_grupo(novo);
+    // acessa a fila daquele grupo
     fila_t *cur = fila_vetor_pos(fila, (size_t) grp);
+    // e insere
     fila_insere(cur, (void *) novo);
 }
 
 attribute(nonnull)
+// Remove próximo consumidor da fila de espera.
 bool consumidor_fila_remove(fila_t *restrict fila, consumidor_t *restrict *consumidor) {
+    // tenta remover dos grupos em ordem de prioridade
     for (size_t grp = GRUPOS; grp > 0; grp--) {
+        // acessando a lista daquele grupo
         fila_t *cur = fila_vetor_pos(fila, grp-1);
 
+        // e terminando quando consegue remove um consumidor
         if (fila_remove(cur, (void **) consumidor)) {
             return true;
         }
     }
+    // nenhuma fila tinha consumidor
     return false;
 }

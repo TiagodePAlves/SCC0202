@@ -1,5 +1,10 @@
 #ifndef __CONSUMIDOR_H__
-/* */
+/* Implementação de uma fila com 4 propridades distintas.
+ *
+ * A implementação é feita com 4 filas FIFO simples,
+ * tentando remover da prioridade mais alta (seguindo
+ * a ordem em descrita `grupo_t`), até achar algum.
+ */
 #define __CONSUMIDOR_H__
 
 #include "utils.h"
@@ -50,9 +55,14 @@ attribute(nonnull);
 bool consumidor_fila_vazia(const fila_t *fila)
 attribute(pure, nonnull);
 
+// Insere consumidor na fila de espera.
 void consumidor_fila_insere(fila_t *restrict fila, consumidor_t *restrict novo)
 attribute(nonnull);
 
+// Remove próximo consumidor da fila de espera, considerando
+// a ordem de prioridades.
+// Quando a lista está vazia, é retornado falso e não
+// ocorre nenhum tipo de acesso em `consumidor`.
 bool consumidor_fila_remove(fila_t *restrict fila, consumidor_t *restrict *consumidor)
 attribute(nonnull);
 
