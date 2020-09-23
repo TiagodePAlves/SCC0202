@@ -22,10 +22,7 @@ consumidor_t *consumidor_novo(const char nome[], uint8_t idade, bool agravante) 
     size_t len = strlen(nome);
 
     struct consumidor *novo = malloc(tam_bytes_consumidor(len));
-    if (novo == NULL) {
-        erro("Erro de alocação");
-        return NULL;
-    }
+    // assume que não ocorre problema de alocação
 
     novo->idade = idade;
     novo->agravante = agravante;

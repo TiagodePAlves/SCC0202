@@ -13,12 +13,11 @@ typedef void *elem_t;
 
 
 // Aloca nova fila no heap e retorna o endereço dela.
-// Aborta em caso de erro de alocação, nunca retornando null.
+// Assume que não ocorre erro de alocação.
 fila_t *fila_nova(void);
 
 // Aloca um vetor de novas filas e retorna o endereço do vetor.
-// Aborta em caso de erro de alocação, nunca retornando null.
-// Um vetor de tamanho zero é considerado inválido também.
+// Assume que não ocorre erro de alocação.
 fila_t *fila_vetor_novo(size_t N);
 
 // Desaloca toda memória da fila com o `destrutor` para cada
@@ -41,7 +40,7 @@ fila_t *fila_vetor_pos(const fila_t *fila, size_t pos)
 attribute(const);
 
 // Insere novo elemento no final da fila.
-// Aborta em caso de erro ao aumentar o buffer.
+// Assume que não ocorre erro de alocação.
 void fila_insere(fila_t *fila, elem_t restrict elem)
 attribute(nonnull);
 

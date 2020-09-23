@@ -31,7 +31,7 @@ typedef enum grupo {
 
 
 // Criação dos dados de um consumidor.
-// Aborta em caso de erro de alocação, nunca retornando null.
+// Assume que não ocorre erro de alocação.
 consumidor_t *consumidor_novo(const char nome[], uint8_t idade, bool agravante);
 
 // Decisão do grupo ao qual o consumidor pertence.
@@ -39,7 +39,7 @@ grupo_t consumidor_grupo(const consumidor_t *consumidor)
 attribute(pure, nonnull);
 
 // Criação da fila de consumidores.
-// Aborta em caso de erro de alocação, nunca retornando null.
+// Assume que não ocorre erro de alocação.
 fila_t *consumidor_fila_nova(void);
 
 // Desaloca memória da fila de consumidores.

@@ -1,5 +1,5 @@
 #ifndef __UTILS_H__
-/* Macros e funções utilitárias. */
+/* Macros utilitárias. */
 #define __UTILS_H__
 
 // Dado booleano
@@ -15,13 +15,6 @@
 
 // Acesso restrito pelo ponteiro.
 #define restrict __restrict__
-
-// Aborta a execução com uma mensagem de erro.
-#define erro(msg) _error_exit(msg, __FILE__, __LINE__)
-_Noreturn
-// função auxiliar para a execução do erro
-void _error_exit(const char *restrict msg, const char *restrict arquivo, int linha)
-attribute(nonnull, noreturn);
 
 // Inteiro de 8 bits sem sinal.
 typedef unsigned char uint8_t;

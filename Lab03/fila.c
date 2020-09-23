@@ -42,10 +42,7 @@ fila_t *fila_nova(void) {
 // Aloca um vetor de novas filas.
 fila_t *fila_vetor_novo(size_t N) {
     fila_t *novos = reallocarray(NULL, N, sizeof(struct fila));
-    if (novos == NULL) {
-        erro("Erro de alocação");
-        return NULL;
-    }
+    // assume que não ocorre problema de alocação
 
     // poderia usar o `calloc()` ou `memset()` aqui
     for (size_t i = 0; i < N; i++) {
@@ -140,10 +137,7 @@ void aumenta_cap_fila(fila_t *fila) {
 
     // ajusta a capacidade do buffer
     elem_t *buf = reallocarray(fila->buf, new_cap, sizeof(elem_t));
-    if (buf == NULL) {
-        erro("Erro de realocação do buffer");
-        return;
-    }
+    // assume que não ocorre problema de alocação
     fila->buf = buf;
     fila->cap = new_cap;
 
