@@ -4,7 +4,7 @@ CC ?= gcc
 LEVEL ?= 3
 DEBUG ?= -DNDEBUG
 WARNINGS ?= -Wall -Werror -Wpedantic
-CFLAGS ?= -std=gnu17 $(WARNINGS) $(DEBUG) -O$(LEVEL)
+CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
 SRC := main.c fila.c consumidor.c
