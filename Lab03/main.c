@@ -4,6 +4,11 @@
 #include <string.h>
 
 
+// `scanf` com retorno checado
+#define cscanf(...) \
+    if (scanf(__VA_ARGS__) < 0) exit(EXIT_FAILURE)
+
+
 static inline
 // Leitura dos dados do consumidor da entrada padrão.
 consumidor_t *ler_consumidor(void) {
@@ -11,7 +16,7 @@ consumidor_t *ler_consumidor(void) {
     uint8_t idade;
     bool agravante;
     // leitura dos dados
-    scanf("%1023s %hhu %hhu", nome, &idade, &agravante);
+    cscanf("%1023s %hhu %hhu", nome, &idade, &agravante);
     // e construção no heap
     return consumidor_novo(nome, idade, agravante != 0);
 }
@@ -27,7 +32,7 @@ void imprime_consumidor(consumidor_t *consumidor) {
 
 int main(void) {
     size_t N;
-    scanf("%zu", &N);
+    cscanf("%zu", &N);
 
     // fila de atendimento dos clientes
     fila_t *fila = consumidor_fila_nova();
@@ -35,7 +40,7 @@ int main(void) {
     for (size_t i = 0; i < N; i++) {
         // operação
         char op[6];
-        scanf("%5s", op);
+        cscanf("%5s", op);
 
         // operação de inserção
         if (strcmp(op, "ENTRA") == 0) {
