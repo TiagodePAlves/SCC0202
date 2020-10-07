@@ -1,5 +1,4 @@
 #include "lista.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 // Marcador de dado inválido.
@@ -23,7 +22,7 @@ struct lista {
 
 
 // Cria lista nova (vazia)
-lista_t *nova(void) {
+lista_t *lista_nova(void) {
     lista_t *lista = malloc(sizeof(struct lista));
     // Aborta em caso de erro.
     if (lista == NULL) {
