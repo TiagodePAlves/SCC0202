@@ -21,6 +21,7 @@ struct lista {
 };
 
 
+attribute(nonnull)
 // Cria lista nova (vazia)
 lista_t *lista_nova(void) {
     lista_t *lista = malloc(sizeof(struct lista));
@@ -34,7 +35,7 @@ lista_t *lista_nova(void) {
     return lista;
 }
 
-static
+static inline attribute(nonnull)
 // Destrói a lista nó a nó, se não for vazia.
 void destroi_nos(no_t *fim) {
     no_t *no = fim;
@@ -59,6 +60,7 @@ void destroi_nos(no_t *fim) {
     } while (no != fim);
 }
 
+attribute(nonnull)
 // Desaloca lista por completo.
 void lista_destroi(lista_t *lista) {
     if (lista->fim != NULL) {
@@ -70,11 +72,13 @@ void lista_destroi(lista_t *lista) {
     free(lista);
 }
 
+attribute(pure, nonnull)
 // Teste de lista vazia.
 bool lista_vazia(const lista_t *lista) {
     return lista->fim == NULL;
 }
 
+attribute(nonnull)
 // Insere elemento no final da lista.
 void lista_insere(lista_t *lista, unsigned num) {
     // aborta com inteiros não convertíveis pra 'int'
@@ -104,6 +108,7 @@ void lista_insere(lista_t *lista, unsigned num) {
     lista->fim = novo;
 }
 
+attribute(nonnull)
 // Avança início da lista de forma circular.
 void lista_avanca(lista_t *lista) {
     if (! lista_vazia(lista)) {
@@ -112,6 +117,7 @@ void lista_avanca(lista_t *lista) {
     }
 }
 
+attribute(nonnull)
 // Remove último elemento da lista.
 int lista_remove(lista_t *lista) {
     if (lista_vazia(lista)) {

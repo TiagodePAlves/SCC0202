@@ -10,7 +10,7 @@
 #include "lista.h"
 
 
-static
+static inline
 // Simula a roda de Josephus para achar o último.
 unsigned josephus(unsigned n, unsigned k) {
     lista_t *roda = lista_nova();

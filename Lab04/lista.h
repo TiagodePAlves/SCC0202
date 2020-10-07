@@ -12,27 +12,33 @@ typedef struct lista lista_t;
 
 
 /* Gera uma lista nova, inicialmente vazia. */
-lista_t *lista_nova(void);
+lista_t *lista_nova(void)
+attribute(nonnull);
 
 /* Destroi a lista e todos os elementos nela. */
-void lista_destroi(lista_t *lista);
+void lista_destroi(lista_t *lista)
+attribute(nonnull);
 
 /* Teste de habitação da lista. */
-bool lista_vazia(const lista_t *lista);
+bool lista_vazia(const lista_t *lista)
+attribute(pure, nonnull);
 
 /* Insere número na última posição da lista.
  *
  * NOTA: números devem ser convertíveis pra 'int',
  * i.e. menor que INT_MAX.
  */
-void lista_insere(lista_t *lista, unsigned num);
+void lista_insere(lista_t *lista, unsigned num)
+attribute(nonnull);
 
 /* Avança uma posição na lista (de forma circular). */
-void lista_avanca(lista_t *lista);
+void lista_avanca(lista_t *lista)
+attribute(nonnull);
 
 /* Remove o primeiro número da lista e retorna o valor.
  * Retorna um negativo se a lista está vazia.
  */
-int lista_remove(lista_t *lista);
+int lista_remove(lista_t *lista)
+attribute(nonnull);
 
 #endif //__LISTA_H__
