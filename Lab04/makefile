@@ -7,7 +7,7 @@ WARNINGS ?= -Wall -Werror -Wpedantic
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
-SRC := main.c
+SRC := main.c lista.c
 # ARTIFACT
 PROD := main
 LAB  := 04
