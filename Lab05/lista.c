@@ -77,8 +77,56 @@ void lista_insere(lista_t *lista, chave_t chave, unsigned back) {
         novo->back = NULL;
     }
 
-    lista->final->prox = novo;
+    if (lista_vazia(lista)) {
+        lista->cabeca = novo;
+    } else {
+        lista->final->prox = novo;
+    }
     lista->final = novo;
     lista->total += 1;
     lista->tamanho += 1;
+}
+
+no_t *remove_prox(lista_t *lista, chave_t chave) {
+    if (lista_vazia(lista)) {
+        return NULL;
+
+    } else if (lista->cabeca->chave == chave) {
+        no_t *no = lista->cabeca;
+        lista->cabeca = no->prox;
+        if (lista->cabeca == NULL) {
+            lista->final = NULL;
+        }
+        return no;
+    }
+
+    for (no_t *ptr = lista->cabeca; ptr->prox != NULL; ptr = ptr->prox) {
+        if (ptr->prox->chave == chave) {
+            no_t *no = ptr->prox;
+
+            ptr->prox = no->prox;
+            if (ptr->prox == NULL) {
+                lista->final = ptr;
+            }
+            return no;
+        }
+    }
+    return NULL;
+}
+
+void lista_remove(lista_t *lista, chave_t chave) {
+    no_t *removido = remove_prox(lista, chave);
+    lista->total += 1;
+
+    if (removido == NULL) {
+        return;
+    }
+    lista->tamanho -= 1;
+
+    for (no_t *ptr = lista->cabeca; ptr != NULL; ptr = ptr->prox) {
+        if (ptr->back == removido) {
+            ptr->back = NULL;
+        }
+    }
+    free(removido);
 }
