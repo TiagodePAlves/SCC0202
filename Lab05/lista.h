@@ -6,10 +6,10 @@
 
 typedef struct lista lista_t;
 
-typedef struct descricao {
-    chave_t chave;
-    tempo_t criacao;
-} descricao_t;
+// typedef struct descricao {
+//     chave_t chave;
+//     tempo_t criacao;
+// } descricao_t;
 
 typedef signed   chave_t;
 typedef unsigned tempo_t;

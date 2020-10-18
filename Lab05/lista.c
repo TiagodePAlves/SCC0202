@@ -5,8 +5,8 @@
 typedef struct no {
     chave_t chave;
     tempo_t criacao;
-    no_t *back;
-    no_t *prox;
+    struct no *back;
+    struct no *prox;
 } no_t;
 
 struct lista {
