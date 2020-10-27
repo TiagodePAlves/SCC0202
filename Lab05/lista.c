@@ -2,18 +2,26 @@
 #include <stdlib.h>
 
 
+// Nó da lista ligada.
 typedef struct no {
+    /* campos obrigatórios */
+    // Valor do nó
     chave_t chave;
+    // Tempo em que o nó foi criado
     tempo_t criacao;
+    // Algum nó anterior
     struct no *back;
+    // O nó seguinte na lista
     struct no *prox;
+    /* campo extra */
+    // O nó anterior na lista
+    struct no *ant;
 } no_t;
 
 struct lista {
     no_t *cabeca;
     no_t *final;
     tempo_t total;
-    unsigned tamanho;
 };
 
 
@@ -30,6 +38,7 @@ lista_t *lista_nova(void) {
     return nova;
 }
 
+attribute(nonnull)
 void lista_destroi(lista_t *lista) {
     for (no_t *ptr = lista->cabeca; ptr != NULL;) {
         no_t *prox = ptr->prox;
@@ -45,88 +54,130 @@ bool lista_vazia(const lista_t *lista) {
     return lista->cabeca == NULL;
 }
 
-
-no_t *nth_front(const lista_t *lista, unsigned n) {
+static attribute(nonnull)
+no_t *nth_back(const lista_t *lista, unsigned n) {
     unsigned i = 0;
-    for (no_t *ptr = lista->cabeca; ptr != NULL; ptr = ptr->prox) {
+    for (no_t *ptr = lista->final; ptr != NULL; ptr = ptr->ant) {
         if (i++ >= n) {
             return ptr;
         }
     }
-    return lista->final;
+    return lista->cabeca;
 }
 
-no_t *nth_back(const lista_t *lista, unsigned n) {
-    unsigned front = (lista->tamanho >= n)? lista->tamanho - n : 0;
-    return nth_front(lista, front);
-}
-
-void lista_insere(lista_t *lista, chave_t chave, unsigned back) {
+static attribute(nonnull)
+no_t *novo_no(chave_t chave, tempo_t criacao, no_t *back) {
     no_t *novo = malloc(sizeof(no_t));
     if (novo == NULL) {
         exit(EXIT_FAILURE);
-        return;
+        return NULL;
     }
     novo->chave = chave;
-    novo->criacao = lista->total;
-    novo->prox = NULL;
+    novo->criacao = criacao;
+    novo->back = back;
+    novo->prox = novo->ant = NULL;
 
-    if (back > 0) {
-        novo->back = nth_back(lista, back-1);
-    } else {
-        novo->back = NULL;
-    }
+    return novo;
+}
+
+attribute(nonnull)
+void lista_insere(lista_t *lista, chave_t chave, unsigned back) {
+    no_t *backward = (back == 0)? NULL : nth_back(lista, back-1);
+    no_t *novo = novo_no(chave, lista->total++, backward);
 
     if (lista_vazia(lista)) {
         lista->cabeca = novo;
     } else {
+        novo->ant = lista->final;
         lista->final->prox = novo;
     }
     lista->final = novo;
-    lista->total += 1;
-    lista->tamanho += 1;
 }
 
-no_t *remove_prox(lista_t *lista, chave_t chave) {
-    if (lista_vazia(lista)) {
-        return NULL;
-
-    } else if (lista->cabeca->chave == chave) {
-        no_t *no = lista->cabeca;
-        lista->cabeca = no->prox;
-        if (lista->cabeca == NULL) {
-            lista->final = NULL;
-        }
-        return no;
-    }
-
-    for (no_t *ptr = lista->cabeca; ptr->prox != NULL; ptr = ptr->prox) {
-        if (ptr->prox->chave == chave) {
-            no_t *no = ptr->prox;
-
-            ptr->prox = no->prox;
-            if (ptr->prox == NULL) {
-                lista->final = ptr;
-            }
-            return no;
+static attribute(nonnull)
+no_t *acha_prox(lista_t *lista, chave_t chave) {
+    for (no_t *ptr = lista->cabeca; ptr != NULL; ptr = ptr->prox) {
+        if (ptr->chave == chave) {
+            return ptr;
         }
     }
     return NULL;
 }
 
+static attribute(nonnull)
+no_t *remove_no(lista_t *lista, no_t *no) {
+    if (no->ant == NULL && no->prox == NULL) {
+        lista->cabeca = lista->final = NULL;
+
+    } else if (no->ant == NULL) {
+        lista->cabeca = no->prox;
+        no->prox->ant = NULL;
+
+    } else if (no->prox == NULL) {
+        lista->final = no->ant;
+        no->ant->prox = NULL;
+
+    } else {
+        no->ant->prox = no->prox;
+        no->prox->ant = no->ant;
+    }
+
+    no_t *prox = no->prox;
+    return prox;
+}
+
+attribute(nonnull)
 void lista_remove(lista_t *lista, chave_t chave) {
-    no_t *removido = remove_prox(lista, chave);
+    no_t *no = acha_prox(lista, chave);
     lista->total += 1;
 
-    if (removido == NULL) {
+    if (no == NULL) {
         return;
     }
-    lista->tamanho -= 1;
 
-    for (no_t *ptr = lista->cabeca; ptr != NULL; ptr = ptr->prox) {
-        if (ptr->back == removido) {
+    for (no_t *ptr = remove_no(lista, no); ptr != NULL; ptr = ptr->prox) {
+        if (ptr->back == no) {
             ptr->back = NULL;
         }
     }
-    free(removido);
+    free(no);
+}
+
+static attribute(pure, nonnull)
+unsigned posicao_na_lista(const no_t *no) {
+    unsigned pos = 0;
+
+    while (no->ant != NULL) {
+        no = no->ant;
+
+        pos++;
+    }
+
+    return pos;
+}
+
+attribute(nonnull(1, 3))
+void *lista_iter(const lista_t *lista, void *iter, descricao_t *descricao) {
+    const no_t *no;
+
+    if (iter == NULL) {
+        no = lista->cabeca;
+    } else {
+        no = (const no_t *) iter;
+    }
+    if (no == NULL) {
+        exit(EXIT_FAILURE);
+        return NULL;
+    }
+
+    descricao->chave = no->chave;
+    descricao->criacao = no->criacao;
+
+    if (no->back == NULL) {
+        descricao->back = SEM_NO_BACK;
+    } else {
+        descricao->back = posicao_na_lista(no->back);
+    }
+
+    return no->prox;
 }
