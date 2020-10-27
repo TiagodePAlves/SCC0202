@@ -1,3 +1,10 @@
+/*
+ * SCC0202 - 2020 2S
+ *
+ * Nome: William Maehara
+ * Código: 6792263
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "lista.h"
