@@ -3,7 +3,7 @@ CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
 DEBUG ?= -DNDEBUG
-WARNINGS ?= -Wall -Werror -Wpedantic
+WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result -D_FORTIFY_SOURCE=2
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE

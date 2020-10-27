@@ -62,12 +62,16 @@ int main(void) {
         switch (op) {
             // lê chave e posição de backref para o novo nó
             case INSERIR:
-                scanf("%d %u\n", &chave, &back);
+                if (scanf("%d %u\n", &chave, &back) < 0) {
+                    exit(EXIT_FAILURE);
+                }
                 lista_insere(lista, chave, back);
             break;
             // lê a chave e remove o nó com ela
             case REMOVER:
-                scanf("%d\n", &chave);
+                if (scanf("%d\n", &chave) < 0) {
+                    exit(EXIT_FAILURE);
+                }
                 lista_remove(lista, chave);
             break;
             // aborta em operação desconhecida
