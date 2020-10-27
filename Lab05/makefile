@@ -9,16 +9,16 @@ CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 # SOURCE
 SRC := main.c lista.c
 # ARTIFACT
-PROD := main
+PROG := main
 LAB  := 05
 
 # GENERAL COMMANDS
 .PHONY: all run clean debug zip
 
-all: $(PROD)
+all: $(PROG)
 
-run: $(PROD)
-	./$(PROD)
+run: $(PROG)
+	./$(PROG)
 
 zip: $(LAB).zip
 
@@ -28,14 +28,14 @@ debug: CFLAGS += -ggdb3
 debug: clean all
 
 clean:
-	rm -rf *.o $(PROD) *.zip
+	rm -rf *.o $(PROG) *.zip
 
 $(LAB).zip: makefile $(SRC) $(wildcard *.h)
 	zip -J $@ $^
 
 
 # BUILDING
-$(PROD): $(SRC:.c=.o)
+$(PROG): $(SRC:.c=.o)
 	$(CC) $(CFLAGS) $^ -o $@
 
 %.o: %.c
