@@ -105,14 +105,21 @@ uint8_t meia_vida(int num) {
     return count;
 }
 
-attribute(const)
-/* Valor máximo de `rand_hl`. */
-uint8_t __max_hl(void) {
-    return meia_vida(0);
+static inline
+/**
+ * Aborta se 'MAX_HL' não é o valor esperado.
+ * Quando compilado com otimizações, essa função
+ * é completamente removida.
+ */
+void assert_max_hl(void) {
+    if (MAX_RHL != meia_vida(0)) {
+        abort();
+    }
 }
 
 /* Gerador em meia vida. */
 uint8_t rand_hl(void) {
+    assert_max_hl();
     seed();
     // aplica 'meia_vida' com
     // um número pseudoaleatório

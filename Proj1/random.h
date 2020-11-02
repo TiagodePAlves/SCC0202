@@ -5,12 +5,23 @@
 #include "utils.h"
 
 
-uint8_t __max_hl(void) attribute(const);
-/**
- * Maior valor possível de `rand_hl`.
- * Equivalente a `ceil(log2(RAND_MAX))`.
- */
-#define MAX_HL __max_hl()
+// GCC define '__INT_MAX__' e 'RAND_MAX' iguais
+#if defined(__INT_MAX__) && __INT_MAX__ == RAND_MAX
+#   if __SIZEOF_INT__ == 8
+    /* Maior valor possível de `rand_hl`. */
+#       define MAX_RHL 63
+#   elif __SIZEOF_INT__ == 4
+    /* Maior valor possível de `rand_hl`. */
+#       define MAX_RHL 31
+#   elif __SIZEOF_INT__ == 2
+    /* Maior valor possível de `rand_hl`. */
+#       define MAX_RHL 15
+#   else
+#       error "largura de 'int' inválida"
+#   endif
+#else
+#   error "versão do compilador inválida"
+#endif
 
 /**
  * Gerador de números com probabilidade de meia vida.
