@@ -8,7 +8,7 @@
 uint8_t __max_hl(void) attribute(const);
 /**
  * Maior valor possível de `rand_hl`.
- * Equivalente a `floor(log2(RAND_MAX))`.
+ * Equivalente a `ceil(log2(RAND_MAX))`.
  */
 #define MAX_HL __max_hl()
 
