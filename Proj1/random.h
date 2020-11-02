@@ -1,4 +1,5 @@
 #ifndef __RANDOM_H__
+/* Números aleatórios. */
 #define __RANDOM_H__
 
 #include <stdlib.h>
