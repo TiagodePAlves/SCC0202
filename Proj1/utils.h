@@ -8,8 +8,15 @@
 // Acesso restrito pelo ponteiro.
 #define restrict __restrict__
 
-// Inteiro de 8 bits sem sinal.
-typedef unsigned char uint8_t;
+// Inteiro de tamanho fixo, sem sinal.
+#ifdef __GNUC__
+typedef __UINT8_TYPE__ uint8_t;
+typedef __UINT16_TYPE__ uint16_t;
+typedef __UINT32_TYPE__ uint32_t;
+typedef __UINT64_TYPE__ uint64_t;
+#else
+#error "compilador inválido"
+#endif
 
 // Dado booleano
 #define bool  uint8_t

@@ -2,12 +2,12 @@
 CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
-DEBUG ?= -DNDEBUG
+DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=2
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
-SRC := main.c dicio.c
+SRC := main.c dicio.c random.c
 # ARTIFACT
 PROG := main
 LAB  := P1
@@ -23,7 +23,7 @@ run: $(PROG)
 zip: $(LAB).zip
 
 debug: LEVEL = 0
-debug: DEBUG = -DDEBUG -D_FORTIFY_SOURCE=2
+debug: DEBUG = -DDEBUG
 debug: CFLAGS += -ggdb3
 debug: clean all
 
