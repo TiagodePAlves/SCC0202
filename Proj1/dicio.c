@@ -8,7 +8,7 @@ typedef struct palavra {
     char *chave;
     char *descricao;
     size_t nivel;
-    palavra_t *prox[];
+    struct palavra *prox[];
 } palavra_t;
 
 typedef struct dicio {
