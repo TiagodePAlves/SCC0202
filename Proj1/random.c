@@ -81,12 +81,11 @@ void seed(void) {
     }
 }
 
-/* Gerador em meia vida. */
-uint8_t rand_hl(void) {
-    seed();
-    // gera um número pseudoaleatório
-    int num = random();
-
+static inline attribute(const)
+/**
+ * Transformação para a meia vida, usada por `rand_hl`.
+ */
+uint8_t meia_vida(int num) {
     uint8_t count = 0;
     // marca a metade dos valores possíveis
     int mid = RAND_MAX;
@@ -104,4 +103,19 @@ uint8_t rand_hl(void) {
     // máxima contagem quando
     // 'num' é zero
     return count;
+}
+
+attribute(const)
+/* Valor máximo de `rand_hl`. */
+uint8_t __max_hl(void) {
+    return meia_vida(0);
+}
+
+/* Gerador em meia vida. */
+uint8_t rand_hl(void) {
+    seed();
+    // aplica 'meia_vida' com
+    // um número pseudoaleatório
+    int num = random();
+    return meia_vida(num);
 }
