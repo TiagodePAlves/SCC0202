@@ -10,7 +10,7 @@ int main(int argc, const char *argv[]) {
     }
 
     for (size_t i = 0; i < count; i++) {
-        (void) printf("%hhu\n", rand_mv());
+        (void) printf("%hhu\n", rand_hl());
     }
     return EXIT_SUCCESS;
 }
