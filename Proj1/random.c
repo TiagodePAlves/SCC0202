@@ -1,5 +1,4 @@
 #include "random.h"
-#include <string.h>
 
 
 static inline
@@ -57,10 +56,6 @@ uint32_t combina_entropia(uint64_t num) {
     // com os inferiors
     return lo ^ inverte_bits(hi);
 }
-
-// Marcador de branch incomum.
-#define unlikely(x) \
-    __builtin_expect(x, 0)
 
 static inline
 /**
