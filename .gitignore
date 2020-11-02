@@ -1,4 +1,5 @@
 .vscode/
 Lab*/main
+Proj*/main
 *.o
 *.zip
