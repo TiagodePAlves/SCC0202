@@ -17,10 +17,10 @@ typedef __UINT64_TYPE__ uint64_t;
 
 // Marcador de branch provável.
 #define likely(x) \
-    __builtin_expect((x), 1)
+    (__builtin_expect((x), 1))
 // Marcador de branch improvável.
 #define unlikely(x) \
-    __builtin_expect((x), 0)
+    (__builtin_expect((x), 0))
 
 // Dado booleano
 #define bool  uint8_t
