@@ -66,7 +66,7 @@ void seed(void) {
     // marcador estático se já semeado
     static bool seeded = false;
 
-    if (unlikely(!seeded)) {
+    if unlikely(!seeded) {
         // usa ticks reduzido em 32 bits
         // como chave
         uint64_t chave = ticks();
