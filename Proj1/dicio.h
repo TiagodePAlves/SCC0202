@@ -1,9 +1,14 @@
 #ifndef __DICIO_H__
 #define __DICIO_H__
 
-#include "utils.h"
+
+typedef struct const_palavra {
+    const char *restrict chave;
+    const char *restrict descricao;
+} const_palavra_t;
 
 
+// Estrutura do dicionário.
 typedef struct dicio dicio_t;
 
 
