@@ -7,7 +7,9 @@ WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
 # SOURCE
-SRC := main.c dicio.c random.c
+SRC := main.c random.c dicio.c
+HEADERS := $(wildcard dicio/*.h *.h)
+DICIO := $(wildcard dicio/*.c)
 # ARTIFACT
 PROG := main
 LAB  := P1
@@ -38,5 +40,11 @@ $(LAB).zip: makefile $(SRC) $(wildcard *.h)
 $(PROG): $(SRC:.c=.o)
 	$(CC) $(CFLAGS) $^ -o $@
 
-%.o: %.c
+dicio.o: dicio.c $(DICIO) $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+extra:
+	echo $(EXTRA)
