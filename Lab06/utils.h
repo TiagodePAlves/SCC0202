@@ -5,11 +5,23 @@
 // Lista de atributos da função.
 #define attribute(...) __attribute__((__VA_ARGS__))
 
-// Acesso restrito pelo ponteiro.
-#define restrict __restrict__
+// Inteiro de tamanho fixo, sem sinal.
+#ifdef __GNUC__
+typedef __UINT8_TYPE__ uint8_t;
+typedef __UINT16_TYPE__ uint16_t;
+typedef __UINT32_TYPE__ uint32_t;
+typedef __UINT64_TYPE__ uint64_t;
+#define SIZE_MAX __SIZE_MAX__
+#else
+#error "compilador inválido"
+#endif
 
-// Inteiro de 8 bits sem sinal.
-typedef unsigned char uint8_t;
+// Marcador de branch provável.
+#define likely(x) \
+    (__builtin_expect((x), 1))
+// Marcador de branch improvável.
+#define unlikely(x) \
+    (__builtin_expect((x), 0))
 
 // Dado booleano
 #define bool  uint8_t
