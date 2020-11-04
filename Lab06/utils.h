@@ -11,6 +11,7 @@ typedef __UINT8_TYPE__ uint8_t;
 typedef __UINT16_TYPE__ uint16_t;
 typedef __UINT32_TYPE__ uint32_t;
 typedef __UINT64_TYPE__ uint64_t;
+typedef __uint128_t uint128_t;
 #define SIZE_MAX __SIZE_MAX__
 #define UINT64_MAX __UINT64_MAX__
 #else
