@@ -1,11 +1,9 @@
-#include "include.h"
-#include <stdlib.h>
+#include "defs.h"
 
 
 bigint_t *num_init_zero(void) {
     return calloc(1, sizeof(bigint_t));
 }
-
 
 void num_dealloc(bigint_t *num) {
     for (digit_t *ptr = num->number.prox; ptr != NULL;) {

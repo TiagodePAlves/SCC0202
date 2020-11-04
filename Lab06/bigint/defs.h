@@ -2,6 +2,10 @@
 #define __BIGINT_DEFS__
 
 #include "../bigint.h"
+#include "../utils.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 typedef struct digit digit_t;
 

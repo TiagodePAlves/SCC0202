@@ -10,9 +10,6 @@ SRC := $(wildcard *.c)
 
 all: $(OUT)
 
-echo:
-	@echo $(CC) $(CFLAGS) $(LIB) $(SRC)
-
 # BUILDING
 $(OUT): $(SRC)
 	$(CC) $(CFLAGS) -c $^ -o $@
