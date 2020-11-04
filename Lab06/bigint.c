@@ -2,7 +2,7 @@
 
 // TODO: limits.h
 typedef struct digit {
-    size_t digit;
+    uint64_t digit;
     digit_t *prox;
 } digit_t;
 
