@@ -2,7 +2,7 @@
 #define __BIGINT_H__
 
 #include "utils.h"
-#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct bigint bigint_t;
 
