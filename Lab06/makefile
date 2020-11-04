@@ -6,12 +6,13 @@ DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=2
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 
-# SOURCE
-SRC := main.c
 # ARTIFACT
 PROG := main
 LIB  := bigint
 LAB  := 06
+# SOURCE
+SRC := main.c $(wildcard $(LIB)/*.c)
+HEADERS := $(wildcard *.h) $(wildcard $(LIB)/*.h)
 
 # SUBMAKES
 export CC CFLAGS LIB
@@ -34,15 +35,12 @@ debug: clean all
 clean:
 	rm -rf *.o $(PROG) *.zip
 
-$(LAB).zip: makefile $(SRC) $(wildcard *.h)
+$(LAB).zip: makefile $(SRC) $(HEADERS)
 	zip -J $@ $^
 
 # BUILDING
-$(PROG): $(SRC:.c=.o) $(LIB).o
+$(PROG): $(SRC:.c=.o)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(LIB).o:
-	make -C $(LIB)
-
-%.o: %.c
+%.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
