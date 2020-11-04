@@ -24,6 +24,8 @@
 #   error "versão do compilador inválida"
 #endif
 
+uint32_t rand_int(void);
+
 /**
  * Gerador de números com probabilidade de meia vida.
  *

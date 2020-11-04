@@ -1,21 +1,30 @@
 #include "dicio.h"
 #include <stdlib.h>
 
-#define NIVEL_MAX 32
-
-
-typedef struct palavra {
-    char *chave;
-    char *descricao;
-    size_t nivel;
-    struct palavra *prox[];
-} palavra_t;
+#include "dicio/no.c"
 
 typedef struct dicio {
-    palavra_t *ini[NIVEL_MAX];
+    // Ponteiros iniciais da lista,
+    // em cada nível.
+    no_t *ini[MAX_NIVEL];
 } dicio_t;
 
 
 dicio_t *dicio_novo(void) {
-    return NULL;
+    return calloc(1, sizeof(dicio_t));
 }
+
+static inline
+void f() {
+}
+
+// void dicio_insere(dicio_t *dicio, const char *palavra, const char *descricao) {
+//     no_t *no = no_novo(palavra, descricao);
+//     if unlikely(no == NULL) {
+//         // err...
+//     }
+
+//     for (uint8_t i = 0; i < no->nivel; i++) {
+
+//     }
+// }

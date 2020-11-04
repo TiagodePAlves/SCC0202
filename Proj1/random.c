@@ -60,20 +60,29 @@ uint32_t combina_entropia(uint64_t num) {
 static inline
 /**
  * Semeia o RNG com base nos ticks do computador,
- * apenas na primeira chamada.
+ * em chamadas aleatórias.
  */
-void seed(void) {
-    // marcador estático se já semeado
-    static bool seeded = false;
+void reseed(void) {
+    // contador de quantas vezes até semear
+    static unsigned count = 0;
 
-    if unlikely(!seeded) {
+    if unlikely(count == 0) {
         // usa ticks reduzido em 32 bits
         // como chave
         uint64_t chave = ticks();
         srand(combina_entropia(chave));
-        // marca semeado
-        seeded = true;
+        // gera novo contador
+        size_t cnt = rand();
+        cnt = (cnt * 1024) / RAND_MAX;
+        count = 1 + (unsigned) cnt;
     }
+    // reduz contagem
+    count--;
+}
+
+uint32_t rand_int(void) {
+    reseed();
+    return (unsigned) rand();
 }
 
 static inline attribute(const)
@@ -113,11 +122,12 @@ void assert_max_hl(void) {
 }
 
 /* Gerador em meia vida. */
+// TODO: HL até 255
 uint8_t rand_hl(void) {
     assert_max_hl();
-    seed();
+    reseed();
     // aplica 'meia_vida' com
     // um número pseudoaleatório
-    int num = random();
+    int num = rand();
     return meia_vida(num);
 }
