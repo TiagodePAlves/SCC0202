@@ -6,6 +6,10 @@
 typedef struct bigint bigint_t;
 
 
+bigint_t *bigint_init(void);
+
+void bigint_dealloc(bigint_t *num);
+
 // bigint_t *bigint_read(FILE *stream);
 
 // int bigint_write(FILE *restrict stream, const bigint_t *restrict number);

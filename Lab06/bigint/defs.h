@@ -20,9 +20,8 @@ struct bigint {
     bool neg;
 };
 
-digit_t *num_alloc_digito(uint64_t digit);
+digit_t *digito_alloc(uint64_t digit);
 
-digit_t *num_digito_copia(const digit_t *digito, bool incr)
-attribute(nonull);
+digit_t *digito_copia(const digit_t *digito, bool incr);
 
 #endif //__BIGINT_DEFS__
