@@ -23,6 +23,17 @@ void bigint_dealloc(bigint_t *num) {
     free(num);
 }
 
+bigint_t *bigint_copia(const bigint_t *num) {
+    bigint_t *novo = bigint_init();
+
+    novo->numero.digito = num->numero.digito;
+    novo->numero.prox = digito_copia(num->numero.prox, false);
+    novo->neg = num->neg;
+
+    return novo;
+}
+
+
 digit_t *digito_alloc(uint64_t digit) {
     digit_t *novo = calloc(1, sizeof(digit_t));
     if (novo == NULL) {

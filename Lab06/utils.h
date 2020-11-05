@@ -2,8 +2,6 @@
 /* Macros utilitárias. */
 #define __UTILS_H__
 
-// Lista de atributos da função.
-#define attribute(...) __attribute__((__VA_ARGS__))
 
 #ifdef __GNUC__
 // Inteiro de tamanho fixo, sem sinal.
