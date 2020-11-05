@@ -27,5 +27,6 @@ struct bigint {
 
 num_t *num_alloc(digito_t digito);
 void num_dealloc(num_t *num, bool todos);
+int num_cmp(const num_t *lhs, const num_t *rhs);
 
 #endif //__BIGINT_DEFS__
