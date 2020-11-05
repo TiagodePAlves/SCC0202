@@ -50,22 +50,22 @@ uint64_t acessa_digito_incr(const digit_t *digito, bool *incr) {
 digit_t *digito_copia(const digit_t *digito, bool incr) {
     if (digito == NULL) {
         if (incr) {
-            return num_alloc_digito(1);
+            return digito_alloc(1);
         } else {
             return NULL;
         }
     }
 
-    digit_t *copia = num_alloc_digito(acessa_digito_incr(digito, &incr));
+    digit_t *copia = digito_alloc(acessa_digito_incr(digito, &incr));
 
     digito = digito->prox;
     digit_t *ptr;
     for (ptr = copia; digito != NULL; digito = digito->prox) {
-        ptr = ptr->prox = num_alloc_digito(acessa_digito_incr(digito, &incr));
+        ptr = ptr->prox = digito_alloc(acessa_digito_incr(digito, &incr));
     }
 
     if (incr) {
-        ptr->prox = num_alloc_digito(1);
+        ptr->prox = digito_alloc(1);
     }
     return copia;
 }
