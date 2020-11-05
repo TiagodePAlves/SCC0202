@@ -5,7 +5,7 @@
 
 
 
-static attribute(nonnull)
+static
 bool digito_incr(digit_t *digito) {
     if (digito->digito == UINT64_MAX) {
         digito->digito = 0;
@@ -16,7 +16,7 @@ bool digito_incr(digit_t *digito) {
     }
 }
 
-static attribute(nonnull)
+static
 void num_incr(digit_t *lhs) {
     digit_t *dig;
     for (dig = lhs; dig->prox != NULL; dig = dig->prox) {
@@ -29,7 +29,7 @@ void num_incr(digit_t *lhs) {
     }
 }
 
-static attribute(nonnull)
+static
 void num_add(digit_t *lhs, const digit_t *rhs) {
     bool carry = false;
 
@@ -61,10 +61,12 @@ void num_add(digit_t *lhs, const digit_t *rhs) {
     }
 }
 
-void bigint_add(bigint_t *lhs, const bigint_t *rhs) {
+bigint_t *bigint_add(const bigint_t *lhs, const bigint_t *rhs) {
     if (lhs->neg == rhs->neg) {
-        num_add(&lhs->numero, &rhs->numero);
+        bigint_t *novo = bigint_copia(lhs);
+        num_add(&novo->numero, &rhs->numero);
+        return novo;
     } else {
-
+        return NULL;
     }
 }
