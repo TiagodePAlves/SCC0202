@@ -25,7 +25,7 @@ void bigint_dealloc(bigint_t *num) {
 
 digit_t *digito_alloc(uint64_t digit) {
     digit_t *novo = calloc(1, sizeof(digit_t));
-    if unlikely(novo == NULL) {
+    if (novo == NULL) {
         exit(EXIT_FAILURE);
         return NULL;
     }

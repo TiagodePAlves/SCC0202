@@ -23,19 +23,13 @@ typedef __uint128_t uint128_t;
 #error "compilador inválido"
 #endif
 
-// Marcador de branch provável.
-#define likely(x) \
-    (__builtin_expect((x), 1))
-// Marcador de branch improvável.
-#define unlikely(x) \
-    (__builtin_expect((x), 0))
-
 // Dado booleano
 #define bool  uint8_t
 // Veradeiro
 #define true  1
 // Falso
 #define false 0
+
 
 #define __STR(X) #X
 // Transforma entrada em string estática
