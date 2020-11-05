@@ -12,6 +12,7 @@ num_t *num_alloc(digito_t digito) {
     return novo;
 }
 
+static
 num_t num_copia(const num_t *num) {
     num_t base = (num_t) {
         .digito = num->digito,

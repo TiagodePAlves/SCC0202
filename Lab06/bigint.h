@@ -14,4 +14,6 @@ void bigint_dealloc(bigint_t *num);
 
 int bigint_cmp(const bigint_t *lhs, const bigint_t *rhs);
 
+bigint_t *bigint_add(const bigint_t *lhs, const bigint_t *rhs);
+
 #endif //__BIGINT_H__

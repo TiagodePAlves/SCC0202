@@ -1,10 +1,12 @@
 #include "defs.h"
 
 
+static
 int digito_cmp(digito_t lhs, digito_t rhs) {
     return ((int) lhs) - ((int) rhs);
 }
 
+static
 int num_cmp(const num_t *lhs, const num_t *rhs) {
     int cmp = 0;
 
