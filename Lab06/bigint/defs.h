@@ -8,20 +8,24 @@
 #include <string.h>
 
 
-typedef struct digit digit_t;
+typedef struct num num_t;
+typedef uint8_t digito_t;
 
-struct digit {
-    uint64_t digito;
-    digit_t *prox;
+#define MAX     ((digito_t) 9)
+
+
+struct num {
+    digito_t digito;
+    num_t *prox;
 };
 
 struct bigint {
-    digit_t numero;
+    num_t numero;
     bool neg;
 };
 
-digit_t *digito_alloc(uint64_t digit);
 
-digit_t *digito_copia(const digit_t *digito, bool incr);
+num_t *num_alloc(digito_t digito);
+void num_dealloc(num_t *num, bool todos);
 
 #endif //__BIGINT_DEFS__
