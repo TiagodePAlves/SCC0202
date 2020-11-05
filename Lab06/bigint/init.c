@@ -12,6 +12,22 @@ num_t *num_alloc(digito_t digito) {
     return novo;
 }
 
+num_t num_copia(const num_t *num) {
+    num_t base = (num_t) {
+        .digito = num->digito,
+        .prox = NULL
+    };
+
+    num_t *ptr = &base;
+    while (num->prox != NULL) {
+        num = num->prox;
+        ptr = ptr->prox = num_alloc(num->digito);
+    }
+    ptr->prox = num_alloc(num->digito);
+
+    return base;
+}
+
 void num_dealloc(num_t *num, bool todos) {
     for (num_t *ptr = num; todos && ptr != NULL;) {
         num_t *prox = ptr->prox;
@@ -32,6 +48,13 @@ bigint_t *bigint_alloc(void) {
     };
     novo->neg = false;
 
+    return novo;
+}
+
+bigint_t *bigint_copia(const bigint_t *num) {
+    bigint_t *novo = bigint_alloc();
+    novo->numero = num_copia(&num->numero);
+    novo->neg = num->neg;
     return novo;
 }
 
