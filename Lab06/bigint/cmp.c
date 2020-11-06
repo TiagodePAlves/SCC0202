@@ -22,7 +22,7 @@ int num_cmp(const num_t *lhs, const num_t *rhs) {
 
     if (lhs == NULL && rhs == NULL) {
         return cmp;
-    } else if (lhs == NULL) {
+    } else if (rhs == NULL) {
         return 1;
     } else {
         return -1;

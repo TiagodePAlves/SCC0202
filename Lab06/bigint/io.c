@@ -80,7 +80,8 @@ char *realloc_buffer(char *buffer, size_t tam, size_t novo_tam) {
 
 static inline
 char *to_string(const num_t *num) {
-    size_t cap = 8192, tam = 0;
+    size_t cap = 8192;
+    size_t tam = 0;
     char *buffer = realloc_buffer(NULL, 0, cap);
 
     buffer[cap-1] = '\0';

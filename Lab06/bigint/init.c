@@ -28,11 +28,11 @@ num_t num_copia(const num_t *num) {
 }
 
 void num_dealloc(num_t *num, bool todos) {
-    for (num_t *ptr = num; todos && ptr != NULL;) {
-        num_t *prox = ptr->prox;
-        free(ptr);
-        ptr = prox;
-    }
+    do {
+        num_t *prox = num->prox;
+        free(num);
+        num = prox;
+    } while (todos && num != NULL);
 }
 
 bigint_t *bigint_alloc(void) {
@@ -59,7 +59,7 @@ bigint_t *bigint_copia(const bigint_t *num) {
 
 void bigint_dealloc(bigint_t *num) {
     if (num->numero.prox != NULL) {
-        num_dealloc(&num->numero, true);
+        num_dealloc(num->numero.prox, true);
     }
     free(num);
 }
