@@ -16,6 +16,9 @@
  */
 uint32_t rand_int(void);
 
+/* Maior valor retornado por 'rand_hl'. */
+#define MAX_HL  UINT8_MAX - 1
+
 /**
  * Gerador de números com probabilidade de meia vida.
  *

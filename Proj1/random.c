@@ -124,7 +124,7 @@ uint8_t rand_hl(void) {
         } else {
             count += MAX_MV;
         }
-    } while (count < UINT8_MAX - 1);
+    } while (count < MAX_HL);
 
-    return UINT8_MAX - 1;
+    return MAX_HL;
 }

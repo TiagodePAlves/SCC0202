@@ -26,7 +26,7 @@ typedef struct palavra {
 } palavra_t;
 
 // Maior nível possível.
-#define MAX_NIVEL (UINT8_MAX + 1)
+#define MAX_NIVEL (MAX_HL + 1)
 
 /**
  * Padding da struct normalmente inutilizado.
