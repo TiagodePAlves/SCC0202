@@ -80,54 +80,50 @@ void reseed(void) {
     count--;
 }
 
+/* Gerador de inteiro com 31 bits de entropia. */
 uint32_t rand_int(void) {
     reseed();
-    return (unsigned) rand();
+    return (uint32_t) rand();
 }
+
+// Maior valor de retorno de `meia_vida`.
+#define MAX_MV 31
 
 static inline attribute(const)
 /**
- * Transformação para a meia vida, usada por `rand_hl`.
+ * First set bit de um `num` positivo.
  */
-uint8_t meia_vida(int num) {
-    uint8_t count = 0;
-    // marca a metade dos valores possíveis
-    int mid = RAND_MAX;
-    while (mid > 0) {
-        // em cada etapa reduz essa metade
-        mid /= 2;
-        // testa se 'num' continua menor
-        if (num > mid) {
-            return count;
-        }
-        // contando quantas vezes
-        // o número "sobreviveu"
-        count++;
-    }
-    // máxima contagem quando
-    // 'num' é zero
-    return count;
+uint8_t fsb(uint32_t num) {
+    uint8_t pos = (uint8_t) __builtin_ffs((int) num);
+    return pos - 1;
 }
 
-static inline
 /**
- * Aborta se 'MAX_HL' não é o valor esperado.
- * Quando compilado com otimizações, essa função
- * é completamente removida.
+ * Gerador em meia vida.
+ *
+ * Funcionamento: gera um número de UINT8_MAX bits,
+ * MAX_MV bits por vez, até encontrar o primeiro
+ * bit ativo. Assim, a posição 0 tem 50% de chance
+ * de estar ativa, a posição 1 tem 25% de chance de
+ * ser a primeira ativa (50% de bit 0 baixo e 50% de
+ * bit 1 ativo), e assim por diante.
  */
-void assert_max_hl(void) {
-    if (MAX_RHL != meia_vida(0)) {
-        abort();
-    }
-}
-
-/* Gerador em meia vida. */
-// TODO: HL até 255
 uint8_t rand_hl(void) {
-    assert_max_hl();
-    reseed();
-    // aplica 'meia_vida' com
-    // um número pseudoaleatório
-    int num = rand();
-    return meia_vida(num);
+    // contador de bit inativos
+    uint16_t count = 0;
+    do {
+        // gera MAX_MV bits de entropia
+        uint32_t num = rand_int();
+
+        // algum bit ativo
+        if likely(num > 0) {
+            // encontra ele
+            return count + fsb(num);
+        // nenhum bit ativo
+        } else {
+            count += MAX_MV;
+        }
+    } while (count < UINT8_MAX);
+
+    return UINT8_MAX;
 }
