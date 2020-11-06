@@ -1,13 +1,6 @@
 #include "defs.h"
 
-// <ctype.h>
-bool ehespaco(char c) {
-    return c == ' ' || c == '\t';
-}
 
-bool ehdigito(char c) {
-    return '0' <= c && c <= '9';
-}
 
 static
 void mul10(bigint_t *num) {
@@ -19,10 +12,10 @@ void mul10(bigint_t *num) {
 
 
 static
-char pula_espacos(FILE *stream) {
+char pula_char(FILE *stream, char ignorado) {
     char cur;
     while ((cur = fgetc_unlocked(stream)) >= 0) {
-        if (!ehespaco(cur)) {
+        if (cur != ignorado) {
             return cur;
         }
     }
@@ -36,13 +29,21 @@ digito_t to_digito(char digito) {
     return digito - '0';
 }
 
+static inline
+bool ehdigito(char c) {
+    return '0' <= c && c <= '9';
+}
+
 bigint_t *bigint_read(FILE *stream) {
     bigint_t *num = bigint_alloc();
 
-    char letra = pula_espacos(stream);
+    char letra = pula_char(stream, ' ');
     if (letra == '-') {
         num->neg = true;
         letra = fgetc_unlocked(stream);
+    }
+    if (letra == '0') {
+        letra = pula_char(stream, '0');
     }
 
     num->numero.digito = to_digito(letra);
