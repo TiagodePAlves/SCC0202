@@ -3,7 +3,7 @@
 
 
 static
-void mul10(bigint_t *num) {
+void num_mul10(bigint_t *num) {
     num_t *prox = num_alloc(num->numero.digito);
     prox->prox = num->numero.prox;
     num->numero.prox = prox;
@@ -45,11 +45,14 @@ bigint_t *bigint_read(FILE *stream) {
     if (letra == '0') {
         letra = pula_char(stream, '0');
     }
+    if (!ehdigito(letra)) {
+        return num;
+    }
 
     num->numero.digito = to_digito(letra);
 
     while (ehdigito(letra = fgetc_unlocked(stream))) {
-        mul10(num);
+        num_mul10(num);
         num->numero.digito = to_digito(letra);
     }
 
@@ -79,7 +82,7 @@ char *realloc_buffer(char *buffer, size_t tam, size_t novo_tam) {
     return novo;
 }
 
-static inline
+static
 char *to_string(const num_t *num) {
     size_t cap = 8192;
     size_t tam = 0;
