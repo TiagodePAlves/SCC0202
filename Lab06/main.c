@@ -24,7 +24,7 @@ void compara(bigint_t *a, bigint_t *b, comparacao_t tipo) {
     int cmp = bigint_cmp(a, b);
 
     // resultado em relação ao esperado
-    bool res;
+    bool res = false;
     switch (tipo) {
         // comparação de a > b
         case BIG:
