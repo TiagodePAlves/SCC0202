@@ -30,7 +30,7 @@ zip: $(LAB).zip
 debug: LEVEL = 0
 debug: DEBUG = -DDEBUG
 debug: CFLAGS += -ggdb3
-debug: clean all
+debug: all
 
 clean:
 	rm -rf *.o $(PROG) *.zip $(LIB)/*.o

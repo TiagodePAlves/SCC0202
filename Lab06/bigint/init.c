@@ -24,8 +24,6 @@ num_t num_copia(const num_t *num) {
         num = num->prox;
         ptr = ptr->prox = num_alloc(num->digito);
     }
-    ptr->prox = num_alloc(num->digito);
-
     return base;
 }
 

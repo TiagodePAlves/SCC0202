@@ -1,16 +1,18 @@
 #include "defs.h"
 
 // <ctype.h>
-#define isblank(c) \
-    ((c) == ' ' || (c) == '\t')
+bool ehespaco(char c) {
+    return c == ' ' || c == '\t';
+}
 
-#define isdigit(c) \
-    ('0' <= (c) && (c) <= '9')
-
+bool ehdigito(char c) {
+    return '0' <= c && c <= '9';
+}
 
 static
 void mul10(bigint_t *num) {
     num_t *prox = num_alloc(num->numero.digito);
+    prox->prox = num->numero.prox;
     num->numero.prox = prox;
     num->numero.digito = 0;
 }
@@ -20,7 +22,7 @@ static
 char pula_espacos(FILE *stream) {
     char cur;
     while ((cur = fgetc_unlocked(stream)) >= 0) {
-        if (!isblank(cur)) {
+        if (!ehespaco(cur)) {
             return cur;
         }
     }
@@ -45,7 +47,7 @@ bigint_t *bigint_read(FILE *stream) {
 
     num->numero.digito = to_digito(letra);
 
-    while (isdigit(letra = fgetc_unlocked(stream))) {
+    while (ehdigito(letra = fgetc_unlocked(stream))) {
         mul10(num);
         num->numero.digito = to_digito(letra);
     }
