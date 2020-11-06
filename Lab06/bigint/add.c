@@ -66,7 +66,7 @@ void num_sub(num_t *lhs, const num_t *rhs) {
     num_t *zero = num_aplica_op(lhs, rhs, digito_sub, NULL);
 
     if (zero != NULL) {
-        num_dealloc(zero->prox, true);
+        num_dealloc(zero->prox);
         zero->prox = NULL;
     }
 }
