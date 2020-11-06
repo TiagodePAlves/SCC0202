@@ -22,7 +22,7 @@ uint32_t rand_int(void);
  * Isto é, `0` tem 50% de chance, `1` tem 25%, e assim
  * por diante. Em geral, um número 'n' tem "1/2^(n+1)"
  * de probabilidade. O maior número possível é
- * UINT8_MAX.
+ * UINT8_MAX-1.
  */
 uint8_t rand_hl(void);
 
