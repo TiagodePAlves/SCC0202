@@ -26,7 +26,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) > 1:
-        nums = run(sys.argv[1])
+        nums = run(int(sys.argv[1]))
     else:
         nums = run()
 
