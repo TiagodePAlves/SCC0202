@@ -45,6 +45,7 @@ int num_cmp(const num_t *lhs, const num_t *rhs) {
 }
 
 static inline
+// Diz se um 'bigint' é zero (pode ser +0 ou -0).
 bool eh_zero(const bigint_t *num) {
     return num->numero.digito == 0 && num->numero.prox == NULL;
 }
