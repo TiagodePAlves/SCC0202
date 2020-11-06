@@ -2,12 +2,11 @@
 /* Números aleatórios. */
 #define __RANDOM_H__
 
-#include <stdlib.h>
 #include "utils.h"
 
 
 // GCC define '__INT_MAX__' e 'RAND_MAX' iguais
-#if !defined(__INT_MAX__) || __INT_MAX__ != RAND_MAX || __SIZEOF_INT__ != 4
+#if !defined(__GNUC__) || __SIZEOF_INT__ != 4
 #   error "versão do compilador inválida"
 #endif
 
