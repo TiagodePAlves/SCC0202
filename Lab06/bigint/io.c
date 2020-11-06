@@ -1,5 +1,11 @@
 #include "defs.h"
 
+// <ctype.h>
+#define isblank(c) \
+    ((c) == ' ' || (c) == '\t')
+
+#define isdigit(c) \
+    ('0' <= (c) && (c) <= '9')
 
 
 static
@@ -15,19 +21,6 @@ char pula_espacos(FILE *stream) {
     char cur;
     while ((cur = fgetc_unlocked(stream)) >= 0) {
         if (!isblank(cur)) {
-            return cur;
-        }
-    }
-
-    exit(EXIT_FAILURE);
-    return cur;
-}
-
-static
-size_t pula_zeros(FILE *stream) {
-    char cur;
-    while ((cur = fgetc_unlocked(stream)) >= 0) {
-        if (cur != '0') {
             return cur;
         }
     }
