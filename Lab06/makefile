@@ -23,13 +23,12 @@ export CC CFLAGS LIB
 all: $(PROG)
 
 run: $(PROG)
-	./$(PROG)
+	@./$(PROG)
 
 zip: $(LAB).zip
 
 debug: LEVEL = 0
-debug: DEBUG = -DDEBUG
-debug: CFLAGS += -ggdb3
+debug: DEBUG = -DDEBUG -ggdb3
 debug: all
 
 clean:
