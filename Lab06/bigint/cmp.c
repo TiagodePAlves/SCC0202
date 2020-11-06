@@ -1,7 +1,7 @@
 #include "defs.h"
 
 
-static
+static inline
 int digito_cmp(digito_t lhs, digito_t rhs) {
     return ((int) lhs) - ((int) rhs);
 }
