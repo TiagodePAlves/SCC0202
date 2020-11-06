@@ -30,7 +30,6 @@ num_t num_copia(const num_t *num) {
         .digito = num->digito,
         .prox = NULL
     };
-    num = num->prox;
 
     // ponteiro que acompanha, alocando novos dígitos
     num_t *ptr = &base;
