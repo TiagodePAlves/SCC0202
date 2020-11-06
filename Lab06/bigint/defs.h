@@ -28,6 +28,7 @@ struct num {
 // O 'bigint_t' contém a cabeça da lista,
 // já que deve sempre existir ao menos um
 // dígito, e o sinal do número.
+// Não podem existir zeros à esquerda.
 struct bigint {
     // lista com os dígitos
     num_t numero;
