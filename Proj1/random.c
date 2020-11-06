@@ -91,7 +91,7 @@ uint32_t rand_int(void) {
 
 static inline attribute(const)
 /**
- * First set bit de um número positivo.
+ * Encontra o First Set Bit de um número positivo.
  */
 uint8_t fsb(uint32_t num) {
     uint8_t pos = (uint8_t) __builtin_ffs((int) num);
