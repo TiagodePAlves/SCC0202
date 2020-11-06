@@ -58,7 +58,7 @@ int main(void) {
         bigint_t *arg1 = bigint_read(stdin);
         bigint_t *arg2 = bigint_read(stdin);
 
-        (void) printf("Resultado %zu: ", i);
+        (void) printf("Resultado %zu: ", i + 1);
         if (strcmp(op, "sum") == 0) {
             soma(arg1, arg2);
         } else if (strcmp(op, "big") == 0) {
