@@ -16,4 +16,8 @@ int bigint_cmp(const bigint_t *lhs, const bigint_t *rhs);
 
 bigint_t *bigint_add(const bigint_t *lhs, const bigint_t *rhs);
 
+bigint_t *bigint_read(FILE *stream);
+
+void bigint_show(FILE *stream, const bigint_t *num);
+
 #endif //__BIGINT_H__
