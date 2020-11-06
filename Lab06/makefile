@@ -33,7 +33,7 @@ debug: CFLAGS += -ggdb3
 debug: clean all
 
 clean:
-	rm -rf *.o $(PROG) *.zip
+	rm -rf *.o $(PROG) *.zip $(LIB)/*.o
 
 $(LAB).zip: makefile $(SRC) $(HEADERS)
 	zip -J $@ $^
