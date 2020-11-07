@@ -62,7 +62,7 @@ bool no_ini_cmp(const char *lhs, const char *rhs, int *cmp) {
         // compara cada caracter
         int ans = no_char_cmp(lhs[i], rhs[i]);
         // completa se alguma delas termina ou se são diferentes
-        if unlikely(ans != 0 || lhs[i] == '\0' || rhs[i] == '\0') {
+        if (ans != 0 || lhs[i] == '\0' || rhs[i] == '\0') {
             *cmp = ans;
             return true;
         }
