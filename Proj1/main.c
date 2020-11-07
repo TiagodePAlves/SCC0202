@@ -120,7 +120,7 @@ int main(void) {
         }
 
         char str2[S_DEFINICAO + 1] = "";
-        if (op_code == INSERCAO || op_code == REMOCAO) {
+        if (op_code == INSERCAO || op_code == ALTERACAO) {
             int rv = scanf(" %"STR(S_DEFINICAO)"[^\n]", str2);
             if (rv < 1) {
                 mostra_erro(LEITURA);
