@@ -7,14 +7,14 @@ static inline attribute(nonnull)
  * Copia (alocando nova) string de tamanho conhecido.
  * Retorna NULL em erro de alocação.
  */
-char *no_str_copy_len(const char *string, size_t len) {
+char *strndup_unchecked(const char *string, size_t len) {
     // aloca espaço para o '\0' também
-    char *nova = malloc(len + 1);
+    char *nova = malloc(len);
     if unlikely(nova == NULL) {
         return NULL;
     }
     // copia conteudo quando alocação tem sucesso
-    return memcpy(nova, string, len + 1);
+    return memcpy(nova, string, len);
 }
 
 
@@ -27,15 +27,15 @@ bool no_init_chave(no_t *restrict no, const char *restrict chave) {
     size_t len = strlen(chave);
 
     // Se a string cabe no padding
-    if (len < EXTRA_PADDING) {
+    if likely(len < EXTRA_PADDING) {
         // não aloca nova chave
         no->palavra.chave = NULL;
         memcpy(no->ini, chave, len + 1);
     // Senão, faz o processo normal
     } else {
         // Aloca a chave completa
-        char *nova = no_str_copy_len(chave, len);
-        if unlikely(no->palavra.chave == NULL) {
+        char *nova = strndup_unchecked(chave, len + 1);
+        if unlikely(nova == NULL) {
             return false;
         }
         no->palavra.chave = nova;
@@ -52,10 +52,8 @@ static inline attribute(nonnull)
  * Retorna se a operação obteve sucesso.
  */
 bool no_init_descr(no_t *restrict no, const char *restrict descricao) {
-    size_t len = strlen(descricao);
-
     // sempre aloca a descrição inteira em uma nova região
-    char *nova = no_str_copy_len(descricao, len);
+    char *nova = strdup(descricao);
     if unlikely(nova == NULL) {
         return false;
     }
@@ -126,12 +124,12 @@ static inline attribute(nonnull)
  * Retorna se a operação obteve sucesso.
  */
 bool no_altera_descricao(no_t *no, const char *descricao) {
-    char *nova = no_str_copy_len(descricao, strlen(descricao));
-    if (nova == NULL) {
+    char *antiga = no->palavra.descricao;
+
+    if likely(no_init_descr(no, descricao)) {
+        free(antiga);
+        return true;
+    } else {
         return false;
     }
-
-    free(no->palavra.descricao);
-    no->palavra.descricao = nova;
-    return true;
 }

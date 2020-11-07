@@ -10,7 +10,7 @@ static inline attribute(nonnull)
  */
 void no_destroi(no_t *no) {
     // `chave` é NULL quando cabe em `ini`
-    if (no->palavra.chave != NULL) {
+    if unlikely(no->palavra.chave != NULL) {
         free(no->palavra.chave);
     }
     free(no->palavra.descricao);
@@ -23,7 +23,7 @@ static inline attribute(pure, nonnull)
  */
 const_palavra_t no_acessa(const no_t *no) {
     // `chave` é NULL
-    if (no->palavra.chave == NULL) {
+    if likely(no->palavra.chave == NULL) {
         return (const_palavra_t) {
             // então a chave está em `ini`
             .chave = no->ini,
@@ -62,7 +62,7 @@ bool no_ini_cmp(const char *lhs, const char *rhs, int *cmp) {
         // compara cada caracter
         int ans = no_char_cmp(lhs[i], rhs[i]);
         // completa se alguma delas termina ou se são diferentes
-        if (ans != 0 || lhs[i] == '\0' || rhs[i] == '\0') {
+        if unlikely(ans != 0 || lhs[i] == '\0' || rhs[i] == '\0') {
             *cmp = ans;
             return true;
         }
@@ -80,7 +80,7 @@ static inline attribute(pure, nonnull)
 int no_strini_cmp(const no_t *no, const char *ini, const char *str) {
     int cmp;
     // compara com 'ini' primeiro
-    if (!no_ini_cmp(no->ini, ini, &cmp)) {
+    if unlikely(!no_ini_cmp(no->ini, ini, &cmp)) {
         // se precisar, compara com o resto da chave
         cmp = strcmp(no->palavra.chave + EXTRA_PADDING, str + EXTRA_PADDING);
     }
