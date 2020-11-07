@@ -110,9 +110,8 @@ uint8_t fsb(uint32_t num) {
  * bit 1 ativo), e assim por diante.
  */
 uint8_t rand_hl(void) {
-    // contador de bit inativos
-    uint16_t count = 0;
-    do {
+    // contando bit inativos
+    for (uint16_t count = 0; count < MAX_HL - MAX_MV; count += MAX_MV) {
         // gera MAX_MV bits de entropia
         uint32_t num = rand_int();
 
@@ -121,10 +120,7 @@ uint8_t rand_hl(void) {
             // encontra ele
             return count + fsb(num);
         // nenhum bit ativo
-        } else {
-            count += MAX_MV;
         }
-    } while (count < MAX_HL);
-
+    }
     return MAX_HL;
 }
