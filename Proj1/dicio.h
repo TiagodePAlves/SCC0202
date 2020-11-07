@@ -11,7 +11,8 @@ typedef struct const_palavra {
 typedef enum result {
     OK,
     INESPERADO,
-    INVALIDO
+    INVALIDO,
+    LEITURA
 } result_t;
 
 // Estrutura do dicionário.
@@ -19,6 +20,9 @@ typedef struct dicio dicio_t;
 
 
 dicio_t *dicio_novo(void);
+
+void dicio_destroi(dicio_t *dicio)
+attribute(nonnull);
 
 
 result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao)

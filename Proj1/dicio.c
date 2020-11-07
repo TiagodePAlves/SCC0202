@@ -14,7 +14,7 @@ dicio_t *dicio_novo(void) {
     return calloc(1, sizeof(dicio_t));
 }
 
-static inline attribute(nonnull)
+attribute(nonnull)
 void dicio_destroi(dicio_t *dicio) {
     for (no_t *no = dicio->ini[0]; no != NULL;) {
         no_t *prox = no->prox;
