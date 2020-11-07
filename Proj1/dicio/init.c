@@ -118,3 +118,20 @@ no_t *no_novo(const char *chave, const char *descricao) {
     }
     return novo;
 }
+
+static inline attribute(nonnull)
+/**
+ * Altera a descrição de um nó.
+ *
+ * Retorna se a operação obteve sucesso.
+ */
+bool no_altera_descricao(no_t *no, const char *descricao) {
+    char *nova = no_str_copy_len(descricao, strlen(descricao));
+    if (nova == NULL) {
+        return false;
+    }
+
+    free(no->palavra.descricao);
+    no->palavra.descricao = nova;
+    return true;
+}

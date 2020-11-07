@@ -70,6 +70,15 @@ attribute(nonnull);
 
 static inline
 /**
+ * Altera a descrição de um nó.
+ * Retorna se a operação obteve sucesso.
+ */
+bool no_altera_descricao(no_t *no, const char *descricao)
+attribute(nonnull);
+
+
+static inline
+/**
  * Acesso da palavra do nó.
  */
 const_palavra_t no_acessa(const no_t *no)
