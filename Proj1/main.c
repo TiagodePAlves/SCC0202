@@ -75,6 +75,7 @@ typedef enum operacao {
     REMOCAO,
     BUSCA,
     IMPRESSAO,
+    SAIR,
     DESCONHECIDA
 } operacao_t;
 
@@ -90,6 +91,8 @@ operacao_t str_op_code(const char op[]) {
         return BUSCA;
     } else if (strcmp(op, "impressao") == 0) {
         return IMPRESSAO;
+    } else if (strcmp(op, "sair") == 0) {
+        return SAIR;
     } else {
         return DESCONHECIDA;
     }
@@ -104,13 +107,21 @@ int main(void) {
     }
 
     char op[S_OP + 1];
-    char str1[S_VERBETE + 1];
-    while (scanf("%"STR(S_OP)"s %"STR(S_VERBETE)"s", op, str1) >= 2) {
-        char str2[S_DEFINICAO + 1] = "";
-
+    while (scanf("%"STR(S_OP)"s", op) >= 1) {
         operacao_t op_code = str_op_code(op);
+        if (op_code == SAIR) {
+            break;
+        }
+
+        char str1[S_VERBETE + 1] = "";
+        if (scanf(" %"STR(S_VERBETE)"s", str1) < 1) {
+            mostra_erro(LEITURA);
+            continue;
+        }
+
+        char str2[S_DEFINICAO + 1] = "";
         if (op_code == INSERCAO || op_code == REMOCAO) {
-            int rv = scanf("%"STR(S_DEFINICAO)"[^\n]", str2);
+            int rv = scanf(" %"STR(S_DEFINICAO)"[^\n]", str2);
             if (rv < 1) {
                 mostra_erro(LEITURA);
                 continue;
