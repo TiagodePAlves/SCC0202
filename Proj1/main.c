@@ -120,7 +120,7 @@ void impressao(const dicio_t *dicionario, const char *verbete) {
         // avança a iteração
         entrada = dicio_lista_por_inicial(NULL, inicial);
     // até chegar no sentinela
-    } while (!palavra_invalida(entrada));
+    } while (!entrada_invalida(entrada));
 }
 
 // Funções de tratamento da entrada padrão
