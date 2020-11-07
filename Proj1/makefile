@@ -31,7 +31,7 @@ debug: all
 clean:
 	rm -rf *.o $(PROG) *.zip
 
-$(LAB).zip: makefile $(SRC) $(wildcard *.h)
+$(LAB).zip: makefile $(SRC) $(DICIO) $(wildcard *.h)
 	zip -J $@ $^
 
 
