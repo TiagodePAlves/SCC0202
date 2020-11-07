@@ -8,6 +8,10 @@ typedef struct const_palavra {
     const char *restrict descricao;
 } const_palavra_t;
 
+#define palavra_invalida(palavra) \
+    ((palavra).chave == NULL || (palavra).descricao == NULL)
+
+
 typedef enum result {
     OK,
     INESPERADO,
@@ -37,5 +41,7 @@ attribute(nonnull);
 
 const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra)
 attribute(pure, nonnull);
+
+const_palavra_t dicio_lista_inicial(const dicio_t *restrict dicio, char inicial);
 
 #endif //__DICIO_H__

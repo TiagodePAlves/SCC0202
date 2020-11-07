@@ -116,3 +116,22 @@ const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) 
     }
     return no_acessa(resultado.eq);
 }
+
+const_palavra_t dicio_lista_inicial(const dicio_t *restrict dicio, char inicial) {
+    static const no_t *no = NULL;
+
+    if (dicio != NULL) {
+        char palavra[] = {inicial, '\0'};
+        busca_t resultado = dicio_busca_no(dicio, palavra, false);
+
+        no = *resultado.prox[0];
+    }
+
+    if (no != NULL && no->ini[0] == inicial) {
+        no = no->prox[0];
+        return no_acessa(no);
+    } else {
+        no = NULL;
+        return palavra_nao_encontrada();
+    }
+}

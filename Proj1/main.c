@@ -75,22 +75,30 @@ void busca(const dicio_t *dicionario, const char *verbete) {
     }
 
     const_palavra_t entrada = dicio_busca(dicionario, verbete);
-    if (entrada.chave == NULL) {
+    if (palavra_invalida(entrada)) {
         mostra_erro(INVALIDO);
     } else {
         (void) printf("%s %s\n", entrada.chave, entrada.descricao);
     }
 }
 
-static inline
+static inline attribute(nonnull(1))
 void impressao(const dicio_t *dicionario, const char *verbete) {
     if (verbete == NULL) {
         mostra_erro(LEITURA);
         return;
     }
 
-    (void) dicionario;
-    (void) printf("*NÃO IMPLEMENTADO\n");
+    char inicial = verbete[0];
+    const_palavra_t entrada = dicio_lista_inicial(dicionario, inicial);
+    if (palavra_invalida(entrada)) {
+        (void) printf("NAO HA PALAVRAS INICIADAS POR %c\n", inicial);
+        return;
+    }
+
+    for (; !palavra_invalida(entrada); entrada = dicio_lista_inicial(NULL, inicial)) {
+        (void) printf("%s %s\n", entrada.chave, entrada.descricao);
+    }
 }
 
 
@@ -104,7 +112,7 @@ typedef enum operacao {
     DESCONHECIDA
 } operacao_t;
 
-static inline attribute(pure)
+static inline attribute(pure, nonnull)
 operacao_t op_code(const char *op) {
     const char *nome[] = {"insercao", "alteracao", "busca", "impressao", "sair"};
     const operacao_t code[] = {INSERCAO, ALTERACAO, BUSCA, IMPRESSAO, SAIR};
