@@ -29,7 +29,8 @@ typedef struct palavra {
 typedef struct no {
     // A palavra realmente.
     palavra_t palavra;
-    // Primeiro caracter da palavra.
+    // Primeiro caracter da palavra, para usar
+    // uma parte do padding da estrutura.
     char ini;
     // Nível desse nó.
     uint8_t nivel;
@@ -66,7 +67,7 @@ static inline
 /**
  * Acesso da palavra do nó.
  */
-const_palavra_t no_acessa(const no_t *no)
+entrada_t no_acessa(const no_t *no)
 attribute(pure, nonnull);
 
 static inline

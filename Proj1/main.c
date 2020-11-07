@@ -71,11 +71,11 @@ void busca(const dicio_t *dicionario, const char *verbete) {
         return;
     }
 
-    const_palavra_t entrada = dicio_busca(dicionario, verbete);
-    if (palavra_invalida(entrada)) {
+    entrada_t entrada = dicio_busca(dicionario, verbete);
+    if (entrada_invalida(entrada)) {
         mostra_erro(INVALIDA);
     } else {
-        (void) printf("%s %s\n", entrada.chave, entrada.descricao);
+        (void) printf("%s %s\n", entrada.palavra, entrada.descricao);
     }
 }
 
@@ -87,14 +87,14 @@ void impressao(const dicio_t *dicionario, const char *verbete) {
     }
 
     char inicial = verbete[0];
-    const_palavra_t entrada = dicio_lista_por_inicial(dicionario, inicial);
+    entrada_t entrada = dicio_lista_por_inicial(dicionario, inicial);
 
-    if (palavra_invalida(entrada)) {
+    if (entrada_invalida(entrada)) {
         (void) printf("NAO HA PALAVRAS INICIADAS POR %c\n", inicial);
         return;
     }
     do {
-        (void) printf("%s %s\n", entrada.chave, entrada.descricao);
+        (void) printf("%s %s\n", entrada.palavra, entrada.descricao);
 
         entrada = dicio_lista_por_inicial(NULL, inicial);
     } while (!palavra_invalida(entrada));

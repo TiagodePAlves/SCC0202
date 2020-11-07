@@ -111,15 +111,15 @@ result_t dicio_remove(dicio_t *restrict dicio, const char *palavra) {
 }
 
 static inline attribute(const)
-const_palavra_t palavra_nao_encontrada(void) {
-    return (const_palavra_t) {
-        .chave = NULL,
+entrada_t palavra_nao_encontrada(void) {
+    return (entrada_t) {
+        .palavra = NULL,
         .descricao = NULL
     };
 }
 
 attribute(pure, nonnull)
-const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) {
+entrada_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) {
     busca_t resultado = dicio_busca_no(dicio, palavra, true);
     if unlikely(resultado.eq == NULL) {
         return palavra_nao_encontrada();
@@ -127,7 +127,7 @@ const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) 
     return no_acessa(resultado.eq);
 }
 
-const_palavra_t dicio_lista_por_inicial(const dicio_t *restrict dicio, char inicial) {
+entrada_t dicio_lista_por_inicial(const dicio_t *restrict dicio, char inicial) {
     static const no_t *no = NULL;
 
     if (dicio != NULL) {
@@ -138,7 +138,7 @@ const_palavra_t dicio_lista_por_inicial(const dicio_t *restrict dicio, char inic
     }
 
     if (no != NULL && no->ini == inicial) {
-        const_palavra_t palavra = no_acessa(no);
+        entrada_t palavra = no_acessa(no);
         no = no->prox[0];
         return palavra;
     } else {

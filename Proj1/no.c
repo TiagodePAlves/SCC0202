@@ -128,9 +128,9 @@ static inline attribute(pure, nonnull)
 /**
  * Acessa palavra do nó, sem mutabilidade.
  */
-const_palavra_t no_acessa(const no_t *no) {
-    return (const_palavra_t) {
-        .chave = no->palavra.chave,
+entrada_t no_acessa(const no_t *no) {
+    return (entrada_t) {
+        .palavra = no->palavra.chave,
         .descricao = no->palavra.descricao
     };
 }
