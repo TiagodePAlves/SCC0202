@@ -37,10 +37,10 @@ void insercao(dicio_t *dicionario, const char *verbete, const char *definicao) {
 
 static inline
 void alteracao(dicio_t *dicionario, const char *verbete, const char *definicao) {
-    (void) dicionario;
-    (void) verbete;
-    (void) definicao;
-    (void) printf("*NÃO IMPLEMENTADO\n");
+    result_t resultado = dicio_altera(dicionario, verbete, definicao);
+    if (resultado != OK) {
+        mostra_erro(resultado);
+    }
 }
 
 static inline
