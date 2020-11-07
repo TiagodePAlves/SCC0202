@@ -50,7 +50,7 @@ int main(void) {
     arvore_t *arvore = monta_arvore(entradas, len);
     free(entradas);
 
-    imprime_arvore_preordem(stdout, arvore);
+    imprime_arvore_prefixa(stdout, arvore);
 
     arvore_destroi(arvore);
     return EXIT_SUCCESS;
