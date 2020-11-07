@@ -74,7 +74,7 @@ void reseed(void) {
         srand(combina_entropia(chave));
         // gera novo contador
         size_t cnt = rand();
-        cnt = (cnt * 8192) / RAND_MAX;
+        cnt = (cnt * 4096) / RAND_MAX;
         count = 1 + (unsigned) cnt;
     }
     // reduz contagem
