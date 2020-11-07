@@ -57,7 +57,7 @@ static inline attribute(nonnull)
  * Retorna se a comparação está completa, ou ainda
  * precisa comparar mais caracteres.
  */
-bool no_strini_cmp(const char *lhs, const char *rhs, int *cmp) {
+bool no_ini_cmp(const char *lhs, const char *rhs, int *cmp) {
     for (unsigned i = 0; i < EXTRA_PADDING; i++) {
         // compara cada caracter
         int ans = no_char_cmp(lhs[i], rhs[i]);
@@ -74,12 +74,13 @@ bool no_strini_cmp(const char *lhs, const char *rhs, int *cmp) {
 
 static inline attribute(pure, nonnull)
 /**
- * Compara nó com string.
+ * Compara nó com uma string inicial `ini` e, se
+ * preciso, com o restante da string `str`.
  */
-int no_str_cmp(const no_t *no, const char *str) {
+int no_strini_cmp(const no_t *no, const char *ini, const char *str) {
     int cmp;
     // compara com 'ini' primeiro
-    if (!no_strini_cmp(no->ini, str, &cmp)) {
+    if (!no_ini_cmp(no->ini, ini, &cmp)) {
         // se precisar, compara com o resto da chave
         cmp = strcmp(no->palavra.chave + EXTRA_PADDING, str + EXTRA_PADDING);
     }
@@ -88,14 +89,16 @@ int no_str_cmp(const no_t *no, const char *str) {
 
 static inline attribute(pure, nonnull)
 /**
- * Compara dosi nós.
+ * Compara nó com string.
+ */
+int no_str_cmp(const no_t *no, const char *str) {
+    return no_strini_cmp(no, str, str);
+}
+
+static inline attribute(pure, nonnull)
+/**
+ * Compara dois nós.
  */
 int no_cmp(const no_t *lhs, const no_t *rhs) {
-    int cmp;
-    // com o 'ini' deles primeiros
-    if (!no_strini_cmp(lhs->ini, rhs->ini, &cmp)) {
-        // se precisar, compara o resto das chaves
-        cmp = strcmp(lhs->palavra.chave + EXTRA_PADDING, rhs->palavra.chave + EXTRA_PADDING);
-    }
-    return cmp;
+    return no_strini_cmp(lhs, rhs->ini, rhs->palavra.chave);
 }
