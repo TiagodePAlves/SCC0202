@@ -23,10 +23,14 @@ entrada_t *le_entradas(size_t len) {
     for (size_t i = 0; i < len; i++) {
         size_t id;
         int esq, dir;
-        int rv = scanf("%zu %d %d", &id, &esq, &dir);
+        int rv = scanf("%zu %d %d\n", &id, &esq, &dir);
         if (rv < 0) {
             return entradas;
-        } else if (rv >= 3) {
+        } else if (rv < 3) {
+            continue;
+        }
+
+        if (id < len) {
             entradas[id].e = esq;
             entradas[id].d = dir;
         }
@@ -36,7 +40,7 @@ entrada_t *le_entradas(size_t len) {
 
 int main(void) {
     size_t len;
-    int rv = scanf("%zu", &len);
+    int rv = scanf("%zu\n", &len);
     if (rv < 1) {
         return EXIT_FAILURE;
     }

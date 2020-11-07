@@ -141,6 +141,6 @@ void imprime_no(FILE *stream, const no_t *no, const no_t *pai) {
     imprime_no(stream, no->dir, no);
 }
 
-void imprime_arvore_preordem(FILE *stream, const arvore_t *arvore) {
+void imprime_arvore_prefixa(FILE *stream, const arvore_t *arvore) {
     imprime_no(stream, arvore->raiz, NULL);
 }
