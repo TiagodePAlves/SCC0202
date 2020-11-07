@@ -27,6 +27,11 @@ typedef __UINT64_TYPE__ uint64_t;
 #define unlikely(x) \
     (__builtin_expect((x), 0))
 
+
+#define _STR_(X) #X
+// Macro de transformação em texto.
+#define STR(X) _STR_(X)
+
 // Dado booleano
 #define bool  uint8_t
 // Veradeiro
