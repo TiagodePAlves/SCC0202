@@ -37,7 +37,7 @@ busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool 
     const no_t **prox = (const no_t **) dicio->ini;
     for (size_t i = MAX_NIVEL; i > 0; i--) {
         int cmp = 1;
-        while (prox[i-1] != NULL && (cmp = no_str_cmp(prox[i-1], palavra)) < 0) {
+        while (prox[i-1] != NULL && (cmp = no_cmp(prox[i-1], palavra)) < 0) {
             prox = (const no_t **) prox[i-1]->prox;
         }
         busca.prox[i-1] = (no_t **) prox + i - 1;
