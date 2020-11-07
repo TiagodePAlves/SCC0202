@@ -41,7 +41,7 @@ busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool 
             prox = (const no_t **) prox[i-1]->prox;
         }
         busca.prox[i-1] = (no_t **) prox + i - 1;
-        if (cmp == 0) {
+        if unlikely(cmp == 0) {
             busca.eq = (no_t *) prox[i-1];
 
             if (para_em_eq) {
@@ -78,7 +78,7 @@ result_t dicio_altera(dicio_t *restrict dicio, const char *palavra, const char *
         return INVALIDO;
     }
 
-    if (!no_altera_descricao(resultado.eq, descricao)) {
+    if unlikely(!no_altera_descricao(resultado.eq, descricao)) {
         return INESPERADO;
     }
     return OK;
