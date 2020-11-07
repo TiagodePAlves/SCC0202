@@ -72,6 +72,19 @@ result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *
 }
 
 attribute(nonnull)
+result_t dicio_altera(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
+    busca_t resultado = dicio_busca_no(dicio, palavra, true);
+    if unlikely(resultado.eq == NULL) {
+        return INVALIDO;
+    }
+
+    if (!no_altera_descricao(resultado.eq, descricao)) {
+        return INESPERADO;
+    }
+    return OK;
+}
+
+attribute(nonnull)
 result_t dicio_remove(dicio_t *restrict dicio, const char *palavra) {
     busca_t resultado = dicio_busca_no(dicio, palavra, false);
     if unlikely(resultado.eq == NULL) {

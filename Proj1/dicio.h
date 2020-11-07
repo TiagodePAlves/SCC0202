@@ -28,6 +28,10 @@ attribute(nonnull);
 result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao)
 attribute(nonnull);
 
+result_t dicio_altera(dicio_t *restrict dicio, const char *palavra, const char *descricao)
+attribute(nonnull);
+
+
 result_t dicio_remove(dicio_t *restrict dicio, const char *palavra)
 attribute(nonnull);
 
