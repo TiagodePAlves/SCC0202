@@ -51,7 +51,7 @@ busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool 
     return busca;
 }
 
-static inline attribute(nonnull)
+attribute(nonnull)
 result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
     busca_t resultado = dicio_busca_no(dicio, palavra, true);
     if unlikely(resultado.eq != NULL) {
@@ -70,7 +70,7 @@ result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *
     return OK;
 }
 
-static inline attribute(nonnull)
+attribute(nonnull)
 result_t dicio_remove(dicio_t *restrict dicio, const char *palavra) {
     busca_t resultado = dicio_busca_no(dicio, palavra, false);
     if unlikely(resultado.eq == NULL) {
@@ -94,7 +94,7 @@ const_palavra_t palavra_nao_encontrada(void) {
     };
 }
 
-static inline attribute(pure, nonnull)
+attribute(pure, nonnull)
 const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) {
     busca_t resultado = dicio_busca_no(dicio, palavra, true);
     if unlikely(resultado.eq == NULL) {
