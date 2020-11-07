@@ -28,24 +28,12 @@ typedef struct palavra {
 // Maior nível possível.
 #define MAX_NIVEL (MAX_HL + 1)
 
-/**
- * Padding da struct normalmente inutilizado.
- *
- * Nesse caso, será usado para guardar os primeiros
- * caracteres da palavra, para agilizar o acesso.
- */
-#define EXTRA_PADDING \
-    sizeof(struct {palavra_t p; uint8_t n;}) \
-        - (sizeof(palavra_t) + sizeof(uint8_t))
-
 // Nó da lista
 typedef struct no {
     // A palavra realmente.
     palavra_t palavra;
-    // Usa o espaço de padding para guardar os
-    // primeiros caracteres da palavra, evitando
-    // acessos desnecessários e aproveitando o cache.
-    char ini[EXTRA_PADDING];
+    // Primeiro caracter da palavra.
+    char ini;
     // Nível desse nó.
     uint8_t nivel;
     // Próximos nós.
@@ -93,19 +81,7 @@ static inline
  *  - zero    : `no->palavra.chave` == `str`
  *  - positivo: `no->palavra.chave` > `str`
  */
-int no_str_cmp(const no_t *no, const char *str)
-attribute(pure, nonnull);
-
-static inline
-/**
- * Comparação da chave de `lhs` com `rhs`.
- *
- * Retorno
- *  - negativo: `lhs` < `rhs`
- *  - zero    : `lhs` == `rhs`
- *  - positivo: `lhs` > `rhs`
- */
-int no_cmp(const no_t *lhs, const no_t *rhs)
+int no_cmp(const no_t *no, const char *str)
 attribute(pure, nonnull);
 
 #endif //__NO_H__

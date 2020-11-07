@@ -4,45 +4,18 @@
 
 static inline attribute(nonnull)
 /**
- * Copia (alocando nova) string de tamanho conhecido.
- * Retorna NULL em erro de alocação.
- */
-char *strndup_unchecked(const char *string, size_t len) {
-    // aloca espaço para o '\0' também
-    char *nova = malloc(len);
-    if unlikely(nova == NULL) {
-        return NULL;
-    }
-    // copia conteudo quando alocação tem sucesso
-    return memcpy(nova, string, len);
-}
-
-
-static inline attribute(nonnull)
-/**
  * Inicializa o campo `palavra.chave` do `no`.
  * Retorna se a operação obteve sucesso.
  */
 bool no_init_chave(no_t *restrict no, const char *restrict chave) {
-    size_t len = strlen(chave);
-
-    // Se a string cabe no padding
-    if likely(len < EXTRA_PADDING) {
-        // não aloca nova chave
-        no->palavra.chave = NULL;
-        memcpy(no->ini, chave, len + 1);
-    // Senão, faz o processo normal
-    } else {
-        // Aloca a chave completa
-        char *nova = strndup_unchecked(chave, len + 1);
-        if unlikely(nova == NULL) {
-            return false;
-        }
-        no->palavra.chave = nova;
-        // Guarda as iniciais no padding.
-        memcpy(no->ini, nova, EXTRA_PADDING);
+    // Aloca a chave completa
+    char *nova = strdup(chave);
+    if unlikely(nova == NULL) {
+        return false;
     }
-
+    no->palavra.chave = nova;
+    // Guarda as iniciais no padding.
+    no->ini = nova[0];
     return true;
 }
 
@@ -109,27 +82,9 @@ no_t *no_novo(const char *chave, const char *descricao) {
     }
     // inicializa chave
     if unlikely(!no_init_chave(novo, chave)) {
-        // `no_destroi` é valido, mesmo sem
-        // inicializar a chave
-        no_destroi(novo);
+        free(novo->palavra.descricao);
+        free(novo);
         return NULL;
     }
     return novo;
-}
-
-static inline attribute(nonnull)
-/**
- * Altera a descrição de um nó.
- *
- * Retorna se a operação obteve sucesso.
- */
-bool no_altera_descricao(no_t *no, const char *descricao) {
-    char *antiga = no->palavra.descricao;
-
-    if likely(no_init_descr(no, descricao)) {
-        free(antiga);
-        return true;
-    } else {
-        return false;
-    }
 }
