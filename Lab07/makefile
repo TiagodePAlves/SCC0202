@@ -10,7 +10,7 @@ CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
 PROG := main
 LAB  := 07
 # SOURCE
-SRC := main.c
+SRC := main.c arvore.c
 HEADERS := $(wildcard *.h)
 
 # SUBMAKES

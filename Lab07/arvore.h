@@ -13,7 +13,9 @@ typedef struct entrada {
 
 typedef struct arvore arvore_t;
 
-arvore_t *monta_arvore(const entrada_t *entrada, size_t len);
+arvore_t *monta_arvore(const entrada_t entrada[], size_t len);
+
+void arvore_destroi(arvore_t *arvore);
 
 void imprime_arvore_preordem(FILE *stream, const arvore_t *arvore);
 

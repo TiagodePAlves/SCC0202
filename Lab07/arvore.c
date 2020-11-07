@@ -68,7 +68,7 @@ no_t *monta_no(const entrada_t *entrada, size_t len, int id) {
     return no;
 }
 
-arvore_t *monta_arvore(const entrada_t *entrada, size_t len) {
+arvore_t *monta_arvore(const entrada_t entrada[], size_t len) {
     arvore_t *arv = arvore_nova();
     arv->raiz = monta_no(entrada, len, 0);
     return arv;
