@@ -15,6 +15,6 @@ typedef struct arvore arvore_t;
 
 arvore_t *monta_arvore(const entrada_t *entrada, size_t len);
 
-void imprime_arvore(const arvore_t *arvore);
+void imprime_arvore_preordem(FILE *stream, const arvore_t *arvore);
 
 #endif //__ARVORE_H__
