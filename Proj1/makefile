@@ -25,9 +25,8 @@ run: $(PROG)
 zip: $(LAB).zip
 
 debug: LEVEL = 0
-debug: DEBUG = -DDEBUG
-debug: CFLAGS += -ggdb3
-debug: clean all
+debug: DEBUG = -DDEBUG -ggdb3
+debug: all
 
 clean:
 	rm -rf *.o $(PROG) *.zip
