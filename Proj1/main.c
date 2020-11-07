@@ -4,6 +4,7 @@
 #include "dicio.h"
 
 
+#define S_LINHA 250
 #define S_OP    9
 #define S_VERBETE   50
 #define S_DEFINICAO 140
@@ -27,32 +28,52 @@ void mostra_erro(result_t resultado) {
     }
 }
 
-static inline
+static inline attribute(nonnull(1))
 void insercao(dicio_t *dicionario, const char *verbete, const char *definicao) {
+    if (verbete == NULL || definicao == NULL) {
+        mostra_erro(LEITURA);
+        return;
+    }
+
     result_t resultado = dicio_insere(dicionario, verbete, definicao);
     if (resultado != OK) {
         mostra_erro(resultado);
     }
 }
 
-static inline
+static inline attribute(nonnull(1))
 void alteracao(dicio_t *dicionario, const char *verbete, const char *definicao) {
+    if (verbete == NULL || definicao == NULL) {
+        mostra_erro(LEITURA);
+        return;
+    }
+
     result_t resultado = dicio_altera(dicionario, verbete, definicao);
     if (resultado != OK) {
         mostra_erro(resultado);
     }
 }
 
-static inline
+static inline attribute(nonnull(1))
 void remocao(dicio_t *dicionario, const char *verbete) {
+    if (verbete == NULL) {
+        mostra_erro(LEITURA);
+        return;
+    }
+
     result_t resultado = dicio_remove(dicionario, verbete);
     if (resultado != OK) {
         mostra_erro(resultado);
     }
 }
 
-static inline
+static inline attribute(nonnull(1))
 void busca(const dicio_t *dicionario, const char *verbete) {
+    if (verbete == NULL) {
+        mostra_erro(LEITURA);
+        return;
+    }
+
     const_palavra_t entrada = dicio_busca(dicionario, verbete);
     if (entrada.chave == NULL) {
         mostra_erro(INVALIDO);
@@ -63,8 +84,12 @@ void busca(const dicio_t *dicionario, const char *verbete) {
 
 static inline
 void impressao(const dicio_t *dicionario, const char *verbete) {
+    if (verbete == NULL) {
+        mostra_erro(LEITURA);
+        return;
+    }
+
     (void) dicionario;
-    (void) verbete;
     (void) printf("*NÃO IMPLEMENTADO\n");
 }
 
@@ -80,24 +105,18 @@ typedef enum operacao {
 } operacao_t;
 
 static inline attribute(pure)
-operacao_t str_op_code(const char op[]) {
-    if (strcmp(op, "insercao") == 0) {
-        return INSERCAO;
-    } else if (strcmp(op, "alteracao") == 0) {
-        return ALTERACAO;
-    } else if (strcmp(op, "remocao") == 0) {
-        return REMOCAO;
-    } else if (strcmp(op, "busca") == 0) {
-        return BUSCA;
-    } else if (strcmp(op, "impressao") == 0) {
-        return IMPRESSAO;
-    } else if (strcmp(op, "sair") == 0) {
-        return SAIR;
-    } else {
-        return DESCONHECIDA;
-    }
-}
+operacao_t op_code(const char *op) {
+    const char *nome[] = {"insercao", "alteracao", "busca", "impressao", "sair"};
+    const operacao_t code[] = {INSERCAO, ALTERACAO, BUSCA, IMPRESSAO, SAIR};
+    const size_t len = sizeof(code) / sizeof(operacao_t);
 
+    for (size_t i = 0; i < len; i++) {
+        if (strcmp(op, nome[i]) == 0) {
+            return code[i];
+        }
+    }
+    return DESCONHECIDA;
+}
 
 int main(void) {
     dicio_t *dicionario = dicio_novo();
@@ -106,29 +125,14 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    char op[S_OP + 1];
-    while (scanf("%"STR(S_OP)"s", op) >= 1) {
-        operacao_t op_code = str_op_code(op);
-        if (op_code == SAIR) {
-            break;
-        }
+    char linha[S_LINHA];
+    bool em_execucao = true;
+    while (em_execucao && fgets(linha, S_LINHA, stdin) != NULL) {
+        (void) strtok(linha, " \n");
+        char *str1 = strtok(NULL, " \n");
+        char *str2 = strtok(NULL, "\n");
 
-        char str1[S_VERBETE + 1] = "";
-        if (scanf(" %"STR(S_VERBETE)"s", str1) < 1) {
-            mostra_erro(LEITURA);
-            continue;
-        }
-
-        char str2[S_DEFINICAO + 1] = "";
-        if (op_code == INSERCAO || op_code == ALTERACAO) {
-            int rv = scanf(" %"STR(S_DEFINICAO)"[^\n]", str2);
-            if (rv < 1) {
-                mostra_erro(LEITURA);
-                continue;
-            }
-        }
-
-        switch (op_code) {
+        switch (op_code(linha)) {
             case INSERCAO:
                 insercao(dicionario, str1, str2);
                 break;
@@ -144,7 +148,10 @@ int main(void) {
             case IMPRESSAO:
                 impressao(dicionario, str1);
                 break;
-            default:
+            case SAIR:
+                em_execucao = false;
+                break;
+            case DESCONHECIDA:
                 mostra_erro(INVALIDO);
         }
     }
