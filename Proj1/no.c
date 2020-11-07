@@ -2,6 +2,9 @@
 /* Funções gerais e de inicialização de nós. */
 
 
+/* * * * * * * * *
+ * INICIALIZAÇÃO */
+
 static inline attribute(nonnull)
 /**
  * Inicializa o campo `palavra.chave` do `no`.
@@ -40,7 +43,7 @@ static inline
  * Aloca nó com níveis aleatórios, seguindo
  * a distribuição de `rand_hl`.
  *
- * Todos os valores além de `nivel` são zerados.
+ * Todos os campos além de `nivel` são zerados.
  * Retorna NULL em caso de erro.
  */
 no_t *no_alloc(void) {
@@ -88,6 +91,10 @@ no_t *no_novo(const char *chave, const char *descricao) {
     }
     return novo;
 }
+
+
+/* * * * * * * * * * *
+ * OUTRAS OPERAÇÕES  */
 
 static inline attribute(nonnull)
 /**

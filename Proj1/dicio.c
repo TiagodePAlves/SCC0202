@@ -10,6 +10,9 @@ typedef struct dicio {
 } dicio_t;
 
 
+/* * * * * * * * *
+ * INICIALIZAÇÃO */
+
 dicio_t *dicio_novo(void) {
     return calloc(1, sizeof(dicio_t));
 }
@@ -23,6 +26,10 @@ void dicio_destroi(dicio_t *dicio) {
     }
     free(dicio);
 }
+
+
+/* * * * * * * * *
+ * BUSCA INTERNA */
 
 typedef struct busca {
     no_t **prox[MAX_NIVEL];
@@ -51,6 +58,9 @@ busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool 
     }
     return busca;
 }
+
+/* * * * * * * * * * * * * *
+ * OPERAÇÕES DO DICIONÁRIO */
 
 attribute(nonnull)
 result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
