@@ -4,10 +4,10 @@
 
 
 #ifdef __GNUC__
-// Inteiro de tamanho fixo, sem sinal.
-typedef __UINT8_TYPE__ uint8_t;
+    // Inteiro de tamanho fixo, sem sinal.
+    typedef __UINT8_TYPE__ uint8_t;
 #else
-#error "compilador inválido"
+#   error "compilador inválido"
 #endif
 
 // Dado booleano
