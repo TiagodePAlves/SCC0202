@@ -81,6 +81,7 @@ void reseed(void) {
     count--;
 }
 
+extern inline
 /* Gerador de inteiro com 31 bits de entropia. */
 uint32_t rand_int(void) {
     reseed();
@@ -102,25 +103,22 @@ uint8_t fsb(uint32_t num) {
 /**
  * Gerador em meia vida.
  *
- * Funcionamento: gera um número de UINT8_MAX bits,
- * MAX_MV bits por vez, até encontrar o primeiro
- * bit ativo. Assim, a posição 0 tem 50% de chance
- * de estar ativa, a posição 1 tem 25% de chance de
- * ser a primeira ativa (50% de bit 0 baixo e 50% de
- * bit 1 ativo), e assim por diante.
+ * Funcionamento: gera um número de 31 bits de,
+ * entropia e encontra o primeiro bit ativo. Assim,
+ * a posição 0 tem 50% de chance de estar ativa, a
+ * posição 1 tem 25% de chance de ser a primeira
+ * ativa (50% de bit 0 baixo e 50% de  bit 1 ativo),
+ * e assim por diante.
  */
 uint8_t rand_hl(void) {
-    // contando bit inativos
-    for (uint16_t count = 0; count < MAX_HL - MAX_MV; count += MAX_MV) {
-        // gera MAX_MV bits de entropia
-        uint32_t num = rand_int();
-
-        // algum bit ativo
-        if likely(num > 0) {
-            // encontra ele
-            return count + fsb(num);
-        // nenhum bit ativo
-        }
+    uint32_t num = rand_int();
+    // Acha o bit quando ele existe
+    if likely(num > 0) {
+        return fsb(num);
+    // senão retorna o maior
+    } else {
+        // MAX_HL tem mais chance
+        // que seu número diz
+        return MAX_HL;
     }
-    return MAX_HL;
 }
