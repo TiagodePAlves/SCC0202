@@ -17,9 +17,6 @@
 // Uma palavra guardada no nó.
 typedef struct palavra {
     // A palavra propriamente.
-    // Pode ser NULL, se a palavra cabe completamente
-    // em `no_t.ini`, ou seja, a palavra tem menos de
-    // `EXTRA_PADDING` caracteres.
     char *chave;
     // A descrição do palavra.
     char *descricao;

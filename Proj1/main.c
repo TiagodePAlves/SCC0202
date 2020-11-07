@@ -13,15 +13,12 @@
 static inline
 void mostra_erro(result_t resultado) {
     switch (resultado) {
-        case INVALIDO:
+        case INVALIDA:
             (void) printf("OPERACAO INVALIDA\n");
             break;
         case INESPERADO:
             (void) printf("ERRO INESPERADO\n");
             perror("Lab06");
-            break;
-        case LEITURA:
-            (void) printf("PROBLEMAS DE LEITURA\n");
             break;
         case OK:
             break;
@@ -31,7 +28,7 @@ void mostra_erro(result_t resultado) {
 static inline attribute(nonnull(1))
 void insercao(dicio_t *dicionario, const char *verbete, const char *definicao) {
     if (verbete == NULL || definicao == NULL) {
-        mostra_erro(LEITURA);
+        mostra_erro(INVALIDA);
         return;
     }
 
@@ -44,7 +41,7 @@ void insercao(dicio_t *dicionario, const char *verbete, const char *definicao) {
 static inline attribute(nonnull(1))
 void alteracao(dicio_t *dicionario, const char *verbete, const char *definicao) {
     if (verbete == NULL || definicao == NULL) {
-        mostra_erro(LEITURA);
+        mostra_erro(INVALIDA);
         return;
     }
 
@@ -57,7 +54,7 @@ void alteracao(dicio_t *dicionario, const char *verbete, const char *definicao) 
 static inline attribute(nonnull(1))
 void remocao(dicio_t *dicionario, const char *verbete) {
     if (verbete == NULL) {
-        mostra_erro(LEITURA);
+        mostra_erro(INVALIDA);
         return;
     }
 
@@ -70,13 +67,13 @@ void remocao(dicio_t *dicionario, const char *verbete) {
 static inline attribute(nonnull(1))
 void busca(const dicio_t *dicionario, const char *verbete) {
     if (verbete == NULL) {
-        mostra_erro(LEITURA);
+        mostra_erro(INVALIDA);
         return;
     }
 
     const_palavra_t entrada = dicio_busca(dicionario, verbete);
     if (palavra_invalida(entrada)) {
-        mostra_erro(INVALIDO);
+        mostra_erro(INVALIDA);
     } else {
         (void) printf("%s %s\n", entrada.chave, entrada.descricao);
     }
@@ -85,20 +82,22 @@ void busca(const dicio_t *dicionario, const char *verbete) {
 static inline attribute(nonnull(1))
 void impressao(const dicio_t *dicionario, const char *verbete) {
     if (verbete == NULL) {
-        mostra_erro(LEITURA);
+        mostra_erro(INVALIDA);
         return;
     }
 
     char inicial = verbete[0];
-    const_palavra_t entrada = dicio_lista_inicial(dicionario, inicial);
+    const_palavra_t entrada = dicio_lista_por_inicial(dicionario, inicial);
+
     if (palavra_invalida(entrada)) {
         (void) printf("NAO HA PALAVRAS INICIADAS POR %c\n", inicial);
         return;
     }
-
-    for (; !palavra_invalida(entrada); entrada = dicio_lista_inicial(NULL, inicial)) {
+    do {
         (void) printf("%s %s\n", entrada.chave, entrada.descricao);
-    }
+
+        entrada = dicio_lista_por_inicial(NULL, inicial);
+    } while (!palavra_invalida(entrada));
 }
 
 
@@ -160,7 +159,7 @@ int main(void) {
                 em_execucao = false;
                 break;
             case DESCONHECIDA:
-                mostra_erro(INVALIDO);
+                mostra_erro(INVALIDA);
         }
     }
 

@@ -56,7 +56,7 @@ attribute(nonnull)
 result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
     busca_t resultado = dicio_busca_no(dicio, palavra, true);
     if unlikely(resultado.eq != NULL) {
-        return INVALIDO;
+        return INVALIDA;
     }
 
     no_t *novo = no_novo(palavra, descricao);
@@ -75,7 +75,7 @@ attribute(nonnull)
 result_t dicio_altera(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
     busca_t resultado = dicio_busca_no(dicio, palavra, true);
     if unlikely(resultado.eq == NULL) {
-        return INVALIDO;
+        return INVALIDA;
     }
 
     if unlikely(!no_altera_descricao(resultado.eq, descricao)) {
@@ -88,7 +88,7 @@ attribute(nonnull)
 result_t dicio_remove(dicio_t *restrict dicio, const char *palavra) {
     busca_t resultado = dicio_busca_no(dicio, palavra, false);
     if unlikely(resultado.eq == NULL) {
-        return INVALIDO;
+        return INVALIDA;
     }
     no_t *no = resultado.eq;
 
@@ -117,7 +117,7 @@ const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) 
     return no_acessa(resultado.eq);
 }
 
-const_palavra_t dicio_lista_inicial(const dicio_t *restrict dicio, char inicial) {
+const_palavra_t dicio_lista_por_inicial(const dicio_t *restrict dicio, char inicial) {
     static const no_t *no = NULL;
 
     if (dicio != NULL) {
