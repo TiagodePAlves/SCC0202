@@ -81,8 +81,11 @@ void reseed(void) {
     count--;
 }
 
-extern inline
-/* Gerador de inteiro com 31 bits de entropia. */
+static inline
+/**
+ * Gera um número aleatório com 31 bits de entropia,
+ * de 0 até INT_MAX.
+ */
 uint32_t rand_int(void) {
     reseed();
     return (uint32_t) rand();

@@ -10,11 +10,6 @@
 #   error "versão do compilador inválida"
 #endif
 
-/**
- * Gera um número aleatório com 31 bits de entropia,
- * de 0 até INT_MAX.
- */
-uint32_t rand_int(void);
 
 /* Maior valor retornado por 'rand_hl'. */
 #define MAX_HL  32
