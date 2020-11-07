@@ -1,7 +1,7 @@
 #include "dicio.h"
 #include <stdlib.h>
 
-#include "dicio/no.c"
+#include "no.c"
 
 typedef struct dicio {
     // Ponteiros iniciais da lista,

@@ -8,8 +8,8 @@ CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(EXTRA)
 
 # SOURCE
 SRC := main.c random.c dicio.c
-HEADERS := $(wildcard dicio/*.h *.h)
-DICIO := $(wildcard dicio/*.c)
+HEADERS := $(wildcard *.h)
+DICIO := no.c
 # ARTIFACT
 PROG := main
 LAB  := P1

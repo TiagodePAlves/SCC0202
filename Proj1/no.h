@@ -8,8 +8,8 @@
  */
 #define __NO_H__
 
-#include "../random.h"
-#include "../dicio.h"
+#include "random.h"
+#include "dicio.h"
 #include <stdlib.h>
 #include <string.h>
 
