@@ -14,6 +14,7 @@ dicio_t *dicio_novo(void) {
     return calloc(1, sizeof(dicio_t));
 }
 
+static inline attribute(nonnull)
 void dicio_destroi(dicio_t *dicio) {
     for (no_t *no = dicio->ini[0]; no != NULL;) {
         no_t *prox = no->prox;
@@ -28,17 +29,9 @@ typedef struct busca {
     no_t *eq;
 } busca_t;
 
-static inline attribute(const)
-busca_t busca_init(void) {
-    return (busca_t) {
-        .prox = {NULL},
-        .eq = NULL,
-    };
-}
-
 static inline attribute(pure, nonnull)
-busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra) {
-    busca_t busca = busca_init();
+busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool para_em_eq) {
+    busca_t busca;
 
     const no_t **prox = dicio->ini;
     for (size_t i = MAX_NIVEL; i > 0; i--) {
@@ -49,40 +42,63 @@ busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra) {
         busca.prox[i-1] = prox + i - 1;
         if (cmp == 0) {
             busca.eq = prox[i-1];
+
+            if (para_em_eq) {
+                return busca;
+            }
         }
     }
     return busca;
 }
 
-bool dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
-    busca_t resultado = dicio_busca_no(dicio, palavra);
-    if (resultado.eq != NULL) {
-        // err...
+static inline attribute(nonnull)
+result_t dicio_insere(dicio_t *restrict dicio, const char *palavra, const char *descricao) {
+    busca_t resultado = dicio_busca_no(dicio, palavra, true);
+    if unlikely(resultado.eq != NULL) {
+        return INVALIDO;
     }
 
     no_t *novo = no_novo(palavra, descricao);
     if unlikely(novo == NULL) {
-        return false;
+        return INESPERADO;
     }
-    for (size_t i = 0; i < novo->nivel; i++) {
+    size_t nivel = novo->nivel;
+    for (size_t i = 0; i < nivel; i++) {
         novo->prox[i] = *resultado.prox[i];
         *resultado.prox[i] = novo;
     }
-    return true;
+    return OK;
 }
 
-// no_t **dicio_busca_no(const dicio_t *restrict dicio, const char *palavra) {
-//     for (uint8_t nivel = MAX_NIVEL; nivel > 0; nivel--) {
+static inline attribute(nonnull)
+result_t dicio_remove(dicio_t *restrict dicio, const char *palavra) {
+    busca_t resultado = dicio_busca_no(dicio, palavra, false);
+    if unlikely(resultado.eq == NULL) {
+        return INVALIDO;
+    }
+    no_t *no = resultado.eq;
 
-//     }
-// }
+    size_t nivel = no->nivel;
+    for (size_t i = 0; i < nivel; i++) {
+        *resultado.prox[i] = no->prox[i];
+    }
+    no_destroi(no);
+    return OK;
+}
 
-// bool dicio_remove(dicio_t *restrict dicio, const char *palavra) {
-//     no_t **nos = dicio->ini;
-//     for (uint8_t nivel = MAX_NIVEL; nivel > 0; nivel--) {
-//         while (nos[nivel-1] != NULL) {
-//             if (no_str_cmp(nos[nivel-1], palavra) < 0)
-//         }
-//         nos[nivel-1] =
-//     }
-// }
+static inline attribute(const)
+const_palavra_t palavra_nao_encontrada(void) {
+    return (const_palavra_t) {
+        .chave = NULL,
+        .descricao = NULL
+    };
+}
+
+static inline attribute(pure, nonnull)
+const_palavra_t dicio_busca(const dicio_t *restrict dicio, const char *palavra) {
+    busca_t resultado = dicio_busca_no(dicio, palavra, true);
+    if unlikely(resultado.eq == NULL) {
+        return palavra_nao_encontrada();
+    }
+    return no_acessa(resultado.eq);
+}
