@@ -4,7 +4,7 @@ CC ?= gcc
 LEVEL ?= 3
 DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=2
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
-CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
+CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(EXTRA)
 
 # SOURCE
 SRC := main.c random.c dicio.c
