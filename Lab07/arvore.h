@@ -29,6 +29,8 @@ typedef struct arvore arvore_t;
  * são posições válidas na lista serão tratados como
  * filhos vazios. A raiz é o id zero.
  *
+ * Cuidado: não há checagem de ciclos.
+ *
  * Encerra o programa em erro de alocação.
  */
 arvore_t *monta_arvore(const entrada_t entrada[], size_t len);
