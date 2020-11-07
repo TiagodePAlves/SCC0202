@@ -136,9 +136,9 @@ int main(void) {
     char linha[S_LINHA];
     bool em_execucao = true;
     while (em_execucao && fgets(linha, S_LINHA, stdin) != NULL) {
-        (void) strtok(linha, " \n");
-        char *str1 = strtok(NULL, " \n");
-        char *str2 = strtok(NULL, "\n");
+        (void) strtok(linha, " \n\r");
+        char *str1 = strtok(NULL, " \n\r");
+        char *str2 = strtok(NULL, "\n\r");
 
         switch (op_code(linha)) {
             case INSERCAO:
