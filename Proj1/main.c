@@ -114,8 +114,8 @@ typedef enum operacao {
 
 static inline attribute(pure, nonnull)
 operacao_t op_code(const char *op) {
-    const char *nome[] = {"insercao", "alteracao", "busca", "impressao", "sair"};
-    const operacao_t code[] = {INSERCAO, ALTERACAO, BUSCA, IMPRESSAO, SAIR};
+    const char *nome[] = {"insercao", "alteracao", "remocao", "busca", "impressao", "sair"};
+    const operacao_t code[] = {INSERCAO, ALTERACAO, REMOCAO, BUSCA, IMPRESSAO, SAIR};
     const size_t len = sizeof(code) / sizeof(operacao_t);
 
     for (size_t i = 0; i < len; i++) {
