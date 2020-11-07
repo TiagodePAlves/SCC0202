@@ -17,7 +17,7 @@ dicio_t *dicio_novo(void) {
 attribute(nonnull)
 void dicio_destroi(dicio_t *dicio) {
     for (no_t *no = dicio->ini[0]; no != NULL;) {
-        no_t *prox = no->prox;
+        no_t *prox = no->prox[0];
         no_destroi(no);
         no = prox;
     }
@@ -33,15 +33,15 @@ static inline attribute(pure, nonnull)
 busca_t dicio_busca_no(const dicio_t *restrict dicio, const char *palavra, bool para_em_eq) {
     busca_t busca;
 
-    const no_t **prox = dicio->ini;
+    const no_t **prox = (const no_t **) dicio->ini;
     for (size_t i = MAX_NIVEL; i > 0; i--) {
         int cmp = 1;
         while (prox[i-1] != NULL && (cmp = no_str_cmp(prox[i-1], palavra) < 0)) {
-            prox = prox[i-1]->prox;
+            prox = (const no_t **) prox[i-1]->prox;
         }
-        busca.prox[i-1] = prox + i - 1;
+        busca.prox[i-1] = (no_t **) prox + i - 1;
         if (cmp == 0) {
-            busca.eq = prox[i-1];
+            busca.eq = (no_t *) prox[i-1];
 
             if (para_em_eq) {
                 return busca;
