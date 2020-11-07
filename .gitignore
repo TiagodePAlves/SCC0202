@@ -3,3 +3,4 @@ Lab*/main
 Proj*/main
 *.o
 *.zip
+gmon.out
