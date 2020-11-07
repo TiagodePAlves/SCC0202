@@ -127,7 +127,7 @@ const_palavra_t dicio_lista_inicial(const dicio_t *restrict dicio, char inicial)
         no = *resultado.prox[0];
     }
 
-    if (no != NULL && no->ini[0] == inicial) {
+    if (no != NULL && no->ini == inicial) {
         const_palavra_t palavra = no_acessa(no);
         no = no->prox[0];
         return palavra;
