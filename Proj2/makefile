@@ -2,9 +2,10 @@
 CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
-DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1 -march=native -mtune=native -pipe -fno-plt
+OPTFL ?= -march=native -mtune=native -pipe -fno-plt -fivopts -fmodulo-sched -flto
+DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
-CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
+CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(OPTFL)
 
 # ARTIFACT
 PROG := main
@@ -24,7 +25,8 @@ run: $(PROG)
 zip: $(LAB).zip
 
 debug: LEVEL = g
-debug: DEBUG = -DDEBUG -D_FORTIFY_SOURCE=2 -ggdb3
+debug: DEBUG = -DDEBUG -D_FORTIFY_SOURCE=2
+debug: OPTFL = -ggdb3
 debug: all
 
 clean:
