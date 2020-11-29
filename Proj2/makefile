@@ -1,0 +1,41 @@
+# TOOLS
+CC ?= gcc
+# OPTIONS
+LEVEL ?= 3
+DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1 -march=native -mtune=native -pipe -fno-plt
+WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
+CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL)
+
+# ARTIFACT
+PROG := main
+LAB  := P2
+# SOURCE
+SRC := main.c
+HEADERS := $(wildcard *.h)
+
+# GENERAL COMMANDS
+.PHONY: all run clean debug zip
+
+all: $(PROG)
+
+run: $(PROG)
+	@./$(PROG)
+
+zip: $(LAB).zip
+
+debug: LEVEL = g
+debug: DEBUG = -DDEBUG -D_FORTIFY_SOURCE=2 -ggdb3
+debug: all
+
+clean:
+	rm -rf *.o $(PROG) *.zip
+
+$(LAB).zip: makefile $(SRC) $(HEADERS)
+	zip -J $@ $^
+
+# BUILDING
+$(PROG): $(SRC:.c=.o)
+	$(CC) $(CFLAGS) $^ -o $@
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
