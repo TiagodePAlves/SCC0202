@@ -2,7 +2,8 @@
 CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
-OPTFL ?= -march=native -mtune=native -pipe -fno-plt -fivopts -fmodulo-sched -flto
+OPTFL := -march=native -mtune=native -pipe -fno-plt -fivopts
+OPTFL += -fmodulo-sched -flto -fwhole-program
 DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(OPTFL)
@@ -36,8 +37,5 @@ $(LAB).zip: makefile $(SRC) $(HEADERS)
 	zip -J $@ $^
 
 # BUILDING
-$(PROG): $(SRC:.c=.o)
+$(PROG): $(SRC)
 	$(CC) $(CFLAGS) $^ -o $@
-
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
