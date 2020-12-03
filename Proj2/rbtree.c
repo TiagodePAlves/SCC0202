@@ -131,3 +131,72 @@ bool rb_insere(struct rbtree *arvore, chave_t chave) {
 }
 
 
+// BUSCA
+
+const node_t *busca_no(const node_t *raiz, chave_t chave) {
+    for (node_t *no = raiz; no != NULL;) {
+        if (no->chave < chave) {
+            no = no->dir;
+        } else if (no->chave > chave) {
+            no = no->esq;
+        } else {
+            return no;
+        }
+    }
+    return NULL;
+}
+
+const node_t *busca_min(const node_t *no) {
+    if (no == NULL) return NULL;
+    while (no->esq != NULL) {
+        no = no->esq;
+    }
+    return no;
+}
+
+const node_t *busca_max(const node_t *no) {
+    if (no == NULL) return NULL;
+    while (no->dir != NULL) {
+        no = no->dir;
+    }
+    return no;
+}
+
+bool rb_busca_succ(const struct rbtree *arvore, chave_t chave, chave_t *succ) {
+    const node_t *no = busca_no(arvore->raiz, chave);
+    if (no == NULL) return true;
+
+    const node_t *min = busca_min(no->dir);
+    if (min == NULL) return true;
+
+    *succ = min->chave;
+    return false;
+}
+
+bool rb_busca_pred(const struct rbtree *arvore, chave_t chave, chave_t *pred) {
+    const node_t *no = busca_no(arvore->raiz, chave);
+    if (no == NULL) return true;
+
+    const node_t *max = busca_max(no->esq);
+    if (max == NULL) return true;
+
+    *pred = max->chave;
+    return false;
+}
+
+bool rb_busca_max(const struct rbtree *arvore, chave_t *max) {
+    const node_t *no = busca_max(arvore->raiz);
+    if (no == NULL) return false;
+
+    *max = no->chave;
+    return true;
+}
+
+bool rb_busca_min(const struct rbtree *arvore, chave_t *min) {
+    const node_t *no = busca_min(arvore->raiz);
+    if (no == NULL) return false;
+
+    *min = no->chave;
+    return true;
+}
+
