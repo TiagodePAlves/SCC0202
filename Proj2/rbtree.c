@@ -51,4 +51,83 @@ void rb_dealloc(struct rbtree *tree) {
 
 // NO OPS
 
+node_t *rotaciona_esq(node_t *no) {
+    node_t *dir = no->dir;
+
+    no->dir = dir->esq;
+    dir->esq = no;
+    dir->cor = no->cor;
+    no->cor = RUBRO;
+
+    return dir;
+}
+
+node_t *rotaciona_dir(node_t *no) {
+    node_t *esq = no->esq;
+
+    no->esq = esq->dir;
+    esq->dir = no;
+    esq->cor = no->cor;
+    no->cor = RUBRO;
+
+    return esq;
+}
+
+void inverte_cores(node_t *no) {
+    no->cor = !no->cor;
+    no->dir->cor = !no->dir->cor;
+    no->esq->cor = !no->esq->cor;
+}
+
+// INSERT
+
+static bool erro;
+
+static inline attribute(malloc, warn_unused_result, leaf, nothrow)
+node_t *no_alloc(chave_t chave) {
+    node_t *no = malloc(sizeof(node_t));
+    if unlikely(no == NULL) {
+        erro = true;
+        return NULL;
+    }
+
+    no->cor = RUBRO;
+    no->chave = chave;
+    no->esq = no->dir = NULL;
+    return no;
+}
+
+bool vermelho(node_t *no) {
+    return (no != NULL) && (no->cor != NEGRA);
+}
+
+node_t *insere_no(node_t *no, chave_t chave) {
+    if (no == NULL) {
+        return no_alloc(chave);
+    }
+
+    if (no->chave < chave) {
+        no->esq = insere_no(no->esq, chave);
+    } else {
+        no->dir = insere_no(no->dir, chave);
+    }
+
+    if (vermelho(no->dir) && !vermelho(no->esq)) {
+        no = rotaciona_esq(no);
+    }
+    if (vermelho(no->esq) && vermelho(no->esq->esq)) {
+        no = rotaciona_dir(no);
+    }
+    if (vermelho(no->esq) && vermelho(no->dir)) {
+        inverte_cores(no);
+    }
+    return no;
+}
+
+bool rb_insere(struct rbtree *arvore, chave_t chave) {
+    erro = false;
+    arvore->raiz = insere_no(arvore->raiz, chave);
+    return erro;
+}
+
 
