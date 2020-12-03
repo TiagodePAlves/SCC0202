@@ -31,6 +31,17 @@ _Static_assert(sizeof(node_t *) == 8, "");
 
 // INIT
 
+static inline attribute(malloc, warn_unused_result, leaf, nothrow)
+node_t *no_alloc(chave_t chave) {
+    node_t *no = malloc(sizeof(node_t));
+    if unlikely(no == NULL) return NULL;
+
+    no->cor = RUBRO;
+    no->chave = chave;
+    no->esq = no->dir = NULL;
+    return no;
+}
+
 static inline attribute(nonnull, leaf, cold, nothrow)
 void no_free(node_t *no) {
     if (no->esq != NULL) no_free(no->esq);
@@ -83,27 +94,15 @@ void inverte_cores(node_t *no) {
 
 static bool erro;
 
-static inline attribute(malloc, warn_unused_result, leaf, nothrow)
-node_t *no_alloc(chave_t chave) {
-    node_t *no = malloc(sizeof(node_t));
-    if unlikely(no == NULL) {
-        erro = true;
-        return NULL;
-    }
-
-    no->cor = RUBRO;
-    no->chave = chave;
-    no->esq = no->dir = NULL;
-    return no;
-}
-
 bool vermelho(node_t *no) {
     return (no != NULL) && (no->cor != NEGRA);
 }
 
 node_t *insere_no(node_t *no, chave_t chave) {
     if (no == NULL) {
-        return no_alloc(chave);
+        node_t *novo = no_alloc(chave);
+        erro = (novo == NULL);
+        return novo;
     }
 
     if (no->chave < chave) {
@@ -198,5 +197,34 @@ bool rb_busca_min(const struct rbtree *arvore, chave_t *min) {
 
     *min = no->chave;
     return true;
+}
+
+// PREORDEM? HASKELL FOLD? PERCORRE?
+
+typedef void callback_t(chave_t chave, void *data);
+typedef enum ordem {
+    PRE_ORDEM, EM_ORDEM, POS_ORDEM
+} ordem_t;
+
+void percorre(const node_t *no, callback_t *callback, void *data, ordem_t ordem) {
+    if (no == NULL) return;
+
+    if (ordem == PRE_ORDEM) callback(no->chave, data);
+    percorre(no->esq, callback, data, ordem);
+    if (ordem == EM_ORDEM) callback(no->chave, data);
+    percorre(no->dir, callback, data, ordem);
+    if (ordem == POS_ORDEM) callback(no->chave, data);
+}
+
+void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
+    percorre(arvore->raiz, callback, data, PRE_ORDEM);
+}
+
+void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
+    percorre(arvore->raiz, callback, data, EM_ORDEM);
+}
+
+void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
+    percorre(arvore->raiz, callback, data, POS_ORDEM);
 }
 
