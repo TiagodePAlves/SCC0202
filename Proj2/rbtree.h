@@ -5,11 +5,11 @@
 
 
 struct rbtree {
-    struct node *head;
+    struct node *raiz;
 };
 
 
-struct rbtree rb_empty_tree(void)
+struct rbtree rb_nova(void)
 attribute(const, cold, leaf, nothrow);
 
 void rb_dealloc(struct rbtree *tree)
