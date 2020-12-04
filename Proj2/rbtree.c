@@ -174,12 +174,10 @@ const node_t *busca_max(const node_t *no) {
 
 static inline attribute(pure, hot, nothrow, access(read_only, 1))
 const node_t *busca_no_succ_pred(const node_t *raiz, chave_t chave, bool succ) {
-    const node_t *(*busca)(const node_t *no) = succ? busca_min : busca_max;
-
     if unlikely(raiz == NULL) return NULL;
 
     if unlikely(raiz->chave == chave) {
-        return busca(succ? raiz->dir : raiz->esq);
+        return succ? busca_min(raiz->dir) : busca_max(raiz->esq);
     }
 
     const node_t *pai = busca_no(raiz, chave);
@@ -194,7 +192,7 @@ const node_t *busca_no_succ_pred(const node_t *raiz, chave_t chave, bool succ) {
         pai = succ? NULL : pai;
     }
 
-    const node_t *ans = busca(succ? no->dir : no->esq);
+    const node_t *ans = succ? busca_min(no->dir) : busca_max(no->esq);
     if unlikely(ans == NULL) {
         return pai;
     } else {
@@ -203,18 +201,18 @@ const node_t *busca_no_succ_pred(const node_t *raiz, chave_t chave, bool succ) {
 }
 
 bool rb_busca_succ(const struct rbtree *arvore, chave_t chave, chave_t *succ) {
-    const node_t *min = busca_no_succ_pred(arvore->raiz, chave, true);
-    if (min == NULL) return true;
+    const node_t *no = busca_no_succ_pred(arvore->raiz, chave, true);
+    if (no == NULL) return true;
 
-    *succ = min->chave;
+    *succ = no->chave;
     return false;
 }
 
 bool rb_busca_pred(const struct rbtree *arvore, chave_t chave, chave_t *pred) {
-    const node_t *max = busca_no_succ_pred(arvore->raiz, chave, false);
-    if (max == NULL) return true;
+    const node_t *no = busca_no_succ_pred(arvore->raiz, chave, false);
+    if (no == NULL) return true;
 
-    *pred = max->chave;
+    *pred = no->chave;
     return false;
 }
 
