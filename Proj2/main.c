@@ -30,7 +30,7 @@ uint32_t read_num(void) {
 
 static inline
 void imprime_chave(chave_t chave, attribute(unused) void *data) {
-    printf("%u", (unsigned) chave);
+    printf("%u ", (unsigned) chave);
 }
 
 static inline attribute(nonnull)
@@ -56,12 +56,15 @@ void aplica_op(struct rbtree *arvore, enum opcode op) {
             break;
         case PREORDEM:
             rb_pre_ordem(arvore, imprime_chave, NULL);
+            (void) fputc_unlocked('\n', stdout);
             break;
         case EMORDEM:
             rb_em_ordem(arvore, imprime_chave, NULL);
+            (void) fputc_unlocked('\n', stdout);
             break;
         case POSORDEM:
             rb_pos_ordem(arvore, imprime_chave, NULL);
+            (void) fputc_unlocked('\n', stdout);
             break;
         default:
             erro = true;
