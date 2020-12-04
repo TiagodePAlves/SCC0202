@@ -87,5 +87,5 @@ int main(void) {
     }
 
     rb_dealloc(&arvore);
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }

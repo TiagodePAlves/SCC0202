@@ -25,8 +25,8 @@ run: $(PROG)
 
 zip: $(LAB).zip
 
-debug: LEVEL = g
-debug: DEBUG = -DDEBUG -D_FORTIFY_SOURCE=2
+debug: LEVEL = 0
+debug: DEBUG = -DDEBUG
 debug: OPTFL = -ggdb3
 debug: clean all
 
