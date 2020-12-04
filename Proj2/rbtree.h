@@ -8,6 +8,8 @@ struct rbtree {
     struct node *raiz;
 };
 
+typedef uint32_t chave_t;
+
 
 struct rbtree rb_nova(void)
 attribute(const, cold, leaf, nothrow);
@@ -31,12 +33,12 @@ bool rb_busca_min(const struct rbtree *arvore, chave_t *min)
 attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only, 2));
 
 void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data)
-attribute(cold, access(read_only, 1));
+attribute(nonnull(1), cold, access(read_only, 1));
 
 void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data)
-attribute(cold, access(read_only, 1));
+attribute(nonnull(1), cold, access(read_only, 1));
 
 void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data)
-attribute(cold, access(read_only, 1));
+attribute(nonnull(1), cold, access(read_only, 1));
 
 #endif //__RBTREE_H__

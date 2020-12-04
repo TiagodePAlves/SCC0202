@@ -15,8 +15,6 @@ typedef enum color {
     RUBRO
 } color_t;
 
-typedef uint32_t chave_t;
-
 struct node {
     color_t cor;
     chave_t chave;
