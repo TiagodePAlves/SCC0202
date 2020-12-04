@@ -29,7 +29,7 @@ _Static_assert(sizeof(node_t *) == 8, "");
 
 // INIT
 
-static inline attribute(malloc, warn_unused_result, leaf, nothrow)
+static inline attribute(malloc, warn_unused_result, nothrow)
 node_t *no_alloc(chave_t chave) {
     node_t *no = malloc(sizeof(node_t));
     if unlikely(no == NULL) return NULL;
@@ -40,7 +40,7 @@ node_t *no_alloc(chave_t chave) {
     return no;
 }
 
-static inline attribute(nonnull, leaf, cold, nothrow)
+static inline attribute(nonnull, cold, nothrow)
 void no_free(node_t *no) {
     if (no->esq != NULL) no_free(no->esq);
     if (no->dir != NULL) no_free(no->dir);
@@ -60,7 +60,7 @@ void rb_dealloc(struct rbtree *tree) {
 
 // NO OPS
 
-static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, returns_nonnull, hot, nothrow, access(read_write, 1))
 node_t *rotaciona_esq(node_t *no) {
     node_t *dir = no->dir;
 
@@ -72,7 +72,7 @@ node_t *rotaciona_esq(node_t *no) {
     return dir;
 }
 
-static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, returns_nonnull, hot, nothrow, access(read_write, 1))
 node_t *rotaciona_dir(node_t *no) {
     node_t *esq = no->esq;
 
@@ -84,7 +84,7 @@ node_t *rotaciona_dir(node_t *no) {
     return esq;
 }
 
-static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, hot, nothrow, access(read_write, 1))
 void inverte_cores(node_t *no) {
     no->cor = !no->cor;
     no->dir->cor = !no->dir->cor;
@@ -95,12 +95,12 @@ void inverte_cores(node_t *no) {
 
 static bool erro;
 
-static inline attribute(leaf, hot, nothrow, access(read_only, 1))
+static inline attribute(hot, nothrow, access(read_only, 1))
 bool vermelho(const node_t *no) {
     return (no != NULL) && (no->cor != NEGRA);
 }
 
-static inline attribute(leaf, hot, nothrow, access(read_write, 1))
+static inline attribute(hot, nothrow, access(read_write, 1))
 node_t *insere_no(node_t *no, chave_t chave) {
     if (no == NULL) {
         node_t *novo = no_alloc(chave);
@@ -135,9 +135,9 @@ bool rb_insere(struct rbtree *arvore, chave_t chave) {
 
 // BUSCA
 
-static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow, access(read_only, 1))
 const node_t *busca_no(const node_t *raiz, chave_t chave) {
-    for (node_t *no = raiz; no != NULL;) {
+    for (const node_t *no = raiz; no != NULL;) {
         if (no->chave < chave) {
             no = no->dir;
         } else if (no->chave > chave) {
@@ -149,7 +149,7 @@ const node_t *busca_no(const node_t *raiz, chave_t chave) {
     return NULL;
 }
 
-static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow, access(read_only, 1))
 const node_t *busca_min(const node_t *no) {
     if (no == NULL) return NULL;
     while (no->esq != NULL) {
@@ -158,7 +158,7 @@ const node_t *busca_min(const node_t *no) {
     return no;
 }
 
-static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow, access(read_only, 1))
 const node_t *busca_max(const node_t *no) {
     if (no == NULL) return NULL;
     while (no->dir != NULL) {
