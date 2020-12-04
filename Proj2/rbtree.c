@@ -62,6 +62,7 @@ void rb_dealloc(struct rbtree *tree) {
 
 // NO OPS
 
+static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
 node_t *rotaciona_esq(node_t *no) {
     node_t *dir = no->dir;
 
@@ -73,6 +74,7 @@ node_t *rotaciona_esq(node_t *no) {
     return dir;
 }
 
+static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
 node_t *rotaciona_dir(node_t *no) {
     node_t *esq = no->esq;
 
@@ -84,6 +86,7 @@ node_t *rotaciona_dir(node_t *no) {
     return esq;
 }
 
+static inline attribute(nonnull, returns_nonnull, leaf, hot, nothrow, access(read_write, 1))
 void inverte_cores(node_t *no) {
     no->cor = !no->cor;
     no->dir->cor = !no->dir->cor;
@@ -94,10 +97,12 @@ void inverte_cores(node_t *no) {
 
 static bool erro;
 
-bool vermelho(node_t *no) {
+static inline attribute(leaf, hot, nothrow, access(read_only, 1))
+bool vermelho(const node_t *no) {
     return (no != NULL) && (no->cor != NEGRA);
 }
 
+static inline attribute(leaf, hot, nothrow, access(read_write, 1))
 node_t *insere_no(node_t *no, chave_t chave) {
     if (no == NULL) {
         node_t *novo = no_alloc(chave);
@@ -132,6 +137,7 @@ bool rb_insere(struct rbtree *arvore, chave_t chave) {
 
 // BUSCA
 
+static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
 const node_t *busca_no(const node_t *raiz, chave_t chave) {
     for (node_t *no = raiz; no != NULL;) {
         if (no->chave < chave) {
@@ -145,6 +151,7 @@ const node_t *busca_no(const node_t *raiz, chave_t chave) {
     return NULL;
 }
 
+static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
 const node_t *busca_min(const node_t *no) {
     if (no == NULL) return NULL;
     while (no->esq != NULL) {
@@ -153,6 +160,7 @@ const node_t *busca_min(const node_t *no) {
     return no;
 }
 
+static inline attribute(pure, leaf, hot, nothrow, access(read_only, 1))
 const node_t *busca_max(const node_t *no) {
     if (no == NULL) return NULL;
     while (no->dir != NULL) {
@@ -202,10 +210,12 @@ bool rb_busca_min(const struct rbtree *arvore, chave_t *min) {
 // PREORDEM? HASKELL FOLD? PERCORRE?
 
 typedef void callback_t(chave_t chave, void *data);
+
 typedef enum ordem {
     PRE_ORDEM, EM_ORDEM, POS_ORDEM
 } ordem_t;
 
+static inline attribute(hot, access(read_only, 1))
 void percorre(const node_t *no, callback_t *callback, void *data, ordem_t ordem) {
     if (no == NULL) return;
 
