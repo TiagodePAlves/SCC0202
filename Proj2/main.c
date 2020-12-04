@@ -29,7 +29,7 @@ uint32_t read_num(void) {
 }
 
 static inline
-void imprime_chave(chave_t chave, attribute(unused) void *data) {
+void imprime_chave(chave_t chave) {
     printf("%u ", (unsigned) chave);
 }
 
@@ -55,15 +55,15 @@ void aplica_op(struct rbtree *arvore, enum opcode op) {
             erro = rb_busca_min(arvore, &arg);
             break;
         case PREORDEM:
-            rb_pre_ordem(arvore, imprime_chave, NULL);
+            rb_pre_ordem(arvore, imprime_chave);
             (void) fputc_unlocked('\n', stdout);
             break;
         case EMORDEM:
-            rb_em_ordem(arvore, imprime_chave, NULL);
+            rb_em_ordem(arvore, imprime_chave);
             (void) fputc_unlocked('\n', stdout);
             break;
         case POSORDEM:
-            rb_pos_ordem(arvore, imprime_chave, NULL);
+            rb_pos_ordem(arvore, imprime_chave);
             (void) fputc_unlocked('\n', stdout);
             break;
         default:

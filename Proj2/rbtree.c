@@ -230,32 +230,32 @@ bool rb_busca_min(const struct rbtree *arvore, chave_t *min) {
 
 // PREORDEM? HASKELL FOLD? PERCORRE?
 
-typedef void callback_t(chave_t chave, void *data);
+typedef void callback_t(chave_t chave);
 
 typedef enum ordem {
     PRE_ORDEM, EM_ORDEM, POS_ORDEM
 } ordem_t;
 
 static inline attribute(hot, access(read_only, 1))
-void percorre(const node_t *no, callback_t *callback, void *data, ordem_t ordem) {
+void percorre(const node_t *no, callback_t *callback, ordem_t ordem) {
     if (no == NULL) return;
 
-    if (ordem == PRE_ORDEM) callback(no->chave, data);
-    percorre(no->esq, callback, data, ordem);
-    if (ordem == EM_ORDEM) callback(no->chave, data);
-    percorre(no->dir, callback, data, ordem);
-    if (ordem == POS_ORDEM) callback(no->chave, data);
+    if (ordem == PRE_ORDEM) callback(no->chave);
+    percorre(no->esq, callback, ordem);
+    if (ordem == EM_ORDEM) callback(no->chave);
+    percorre(no->dir, callback, ordem);
+    if (ordem == POS_ORDEM) callback(no->chave);
 }
 
-void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
-    percorre(arvore->raiz, callback, data, PRE_ORDEM);
+void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave)) {
+    percorre(arvore->raiz, callback, PRE_ORDEM);
 }
 
-void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
-    percorre(arvore->raiz, callback, data, EM_ORDEM);
+void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave)) {
+    percorre(arvore->raiz, callback, EM_ORDEM);
 }
 
-void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave, void *data), void *data) {
-    percorre(arvore->raiz, callback, data, POS_ORDEM);
+void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave)) {
+    percorre(arvore->raiz, callback, POS_ORDEM);
 }
 
