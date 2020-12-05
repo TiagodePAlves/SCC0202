@@ -2,7 +2,7 @@
 CC ?= gcc
 # OPTIONS
 LEVEL ?= 3
-OPTFL := -march=native -mtune=native -pipe -fno-plt -fivopts
+OPTFL := -march=native -mtune=native -pipe -fivopts
 OPTFL += -fmodulo-sched -flto -fwhole-program
 DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1
 WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
