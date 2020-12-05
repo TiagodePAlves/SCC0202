@@ -5,7 +5,7 @@ LEVEL ?= 3
 OPTFL := -march=native -mtune=native -pipe -fivopts
 OPTFL += -fmodulo-sched -flto -fwhole-program
 DEBUG ?= -DNDEBUG -D_FORTIFY_SOURCE=1
-WARNINGS ?= -Wall -Werror -Wpedantic -Wunused-result
+WARNINGS ?= #-Wall -Werror -Wpedantic -Wunused-result
 CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(OPTFL)
 
 # ARTIFACT
