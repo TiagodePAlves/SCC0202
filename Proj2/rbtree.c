@@ -93,7 +93,7 @@ void rb_dealloc(struct rbtree *tree) {
  * OPERAÇÕES DA LLRB *
  * * * * * * * * * * */
 
-static inline attribute(hot, nothrow, access(read_only, 1))
+static inline attribute(hot, nothrow)
 /**
  * Checa se um nó é vermelho.
  */
@@ -102,7 +102,7 @@ bool vermelho(const node_t *no) {
     return (no != NULL) && (no->cor != NEGRA);
 }
 
-static inline attribute(nonnull, returns_nonnull, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
 /**
  *  Rotação de um nó-3 com filho direito vermelho.
  *
@@ -124,7 +124,7 @@ node_t *rotaciona_esq(node_t *no) {
     return dir;
 }
 
-static inline attribute(nonnull, returns_nonnull, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
 /**
  * Rotação de um nó-3 com filho esquerdo vermelho.
  *
@@ -142,7 +142,7 @@ node_t *rotaciona_dir(node_t *no) {
     return esq;
 }
 
-static inline attribute(nonnull, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, hot, nothrow)
 /**
  * Inversão das cores de um nó e de seus dois filhos.
  * Usada para garantir a propriedade 4.
@@ -160,7 +160,7 @@ void inverte_cores(node_t *no) {
  * INSERÇÃO  *
  * * * * * * */
 
-static inline attribute(nonnull, hot, nothrow, access(read_write, 1))
+static inline attribute(nonnull, hot, nothrow)
 /**
  * Modifica nós recursivamente para inserir um novo nó.
  * Mantém as propriedades 2, 3, 4 e 5 na sua subárvore.
@@ -222,7 +222,7 @@ bool rb_insere(struct rbtree *arvore, chave_t chave) {
  * BUSCA *
  * * * * */
 
-static inline attribute(pure, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow)
 /**
  * Busca nó com menor chave na subárvore.
  *
@@ -236,7 +236,7 @@ const node_t *busca_min(const node_t *no) {
     return no;
 }
 
-static inline attribute(pure, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow)
 /**
  * Busca nó com maior chave na subárvore.
  *
@@ -250,7 +250,7 @@ const node_t *busca_max(const node_t *no) {
     return no;
 }
 
-static inline attribute(pure, hot, nothrow, access(read_only, 1))
+static inline attribute(pure, hot, nothrow)
 /**
  * Busca sucessor (`succ == true`) ou predecessor (`succ == false`) de
  * uma chave na árvore, considerando percurso em-ordem.
@@ -342,7 +342,7 @@ typedef enum ordem {
     PRE_ORDEM, EM_ORDEM, POS_ORDEM
 } ordem_t;
 
-static inline attribute(hot, access(read_only, 1))
+static inline attribute(hot)
 /**
  * Percorre a árvore em percurso `ordem` aplicando a função em cada chave.
  */

@@ -49,7 +49,7 @@ attribute(nonnull, cold, leaf, nothrow);
  *   - erro alocação de memória.
  */
 bool rb_insere(struct rbtree *arvore, chave_t chave)
-attribute(nonnull, leaf, cold, nothrow, access(read_write, 1));
+attribute(nonnull, leaf, cold, nothrow);
 
 /**
  *  Busca o sucessor em-ordem de uma chave.
@@ -60,7 +60,7 @@ attribute(nonnull, leaf, cold, nothrow, access(read_write, 1));
  *   - chave não tem sucessor.
  */
 bool rb_busca_succ(const struct rbtree *arvore, chave_t chave, chave_t *succ)
-attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only, 3));
+attribute(nonnull, leaf, cold, nothrow);
 
 /**
  *  Busca o predecessor em-ordem de uma chave.
@@ -71,7 +71,7 @@ attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only,
  *   - chave não tem predecessor.
  */
 bool rb_busca_pred(const struct rbtree *arvore, chave_t chave, chave_t *pred)
-attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only, 3));
+attribute(nonnull, leaf, cold, nothrow);
 
 /**
  *  Busca o máximo da árvore.
@@ -81,7 +81,7 @@ attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only,
  *   - árvore não tem máximo (árvore vazia).
  */
 bool rb_busca_max(const struct rbtree *arvore, chave_t *max)
-attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only, 2));
+attribute(nonnull, leaf, cold, nothrow);
 
 /**
  *  Busca o mínimo da árvore.
@@ -91,27 +91,27 @@ attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only,
  *   - árvore não tem mínimo (árvore vazia).
  */
 bool rb_busca_min(const struct rbtree *arvore, chave_t *min)
-attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only, 2));
+attribute(nonnull, leaf, cold, nothrow);
 
 /**
  *  Aplica uma função em cada chave da árvore,
  *  com percurso pré-ordem.
  */
 void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull, cold, access(read_only, 1));
+attribute(nonnull, cold);
 
 /**
  *  Aplica uma função em cada chave da árvore,
  *  com percurso em-ordem.
  */
 void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull, cold, access(read_only, 1));
+attribute(nonnull, cold);
 
 /**
  *  Aplica uma função em cada chave da árvore,
  *  com percurso pós-ordem.
  */
 void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull, cold, access(read_only, 1));
+attribute(nonnull, cold);
 
 #endif //__RBTREE_H__
