@@ -98,20 +98,20 @@ attribute(nonnull, leaf, cold, nothrow, access(read_only, 1), access(write_only,
  *  com percurso pré-ordem.
  */
 void rb_pre_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull(1), cold, access(read_only, 1));
+attribute(nonnull, cold, access(read_only, 1));
 
 /**
  *  Aplica uma função em cada chave da árvore,
  *  com percurso em-ordem.
  */
 void rb_em_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull(1), cold, access(read_only, 1));
+attribute(nonnull, cold, access(read_only, 1));
 
 /**
  *  Aplica uma função em cada chave da árvore,
  *  com percurso pós-ordem.
  */
 void rb_pos_ordem(const struct rbtree *arvore, void (*callback)(chave_t chave))
-attribute(nonnull(1), cold, access(read_only, 1));
+attribute(nonnull, cold, access(read_only, 1));
 
 #endif //__RBTREE_H__
