@@ -89,20 +89,23 @@ void treap_dealloc(struct treap *arvore) {
 // BUSCA
 
 static inline
-bool node_busca(const node_t *no, chave_t chave) {
-    if (no == NULL) {
-        return false;
-    } else if (no->chave == chave) {
-        return true;
-    } else if (no->chave > chave) {
-        return node_busca(no->esq, chave);
-    } else {
-        return node_busca(no->dir, chave);
+const node_t **busca_no(const node_t **no_ptr, chave_t chave) {
+    const node_t *no = *no_ptr;
+    while (no != NULL && no->chave != chave) {
+        if (no->chave > chave) {
+            no_ptr = &no->esq;
+            no = no->esq;
+        } else {
+            no_ptr = &no->dir;
+            no = no->dir;
+        }
     }
+    return no_ptr;
 }
 
 bool treap_busca(const struct treap *arvore, chave_t chave) {
-    return node_busca(arvore->raiz, chave);
+    const node_t *no = *busca_no(&arvore->raiz, chave);
+    return no != NULL;
 }
 
 // INSERCAO
@@ -160,4 +163,31 @@ int treap_insere(struct treap *arvore, chave_t chave) {
     erro = false;
     arvore->raiz = insere_chave(arvore->raiz, chave);
     return erro? -1 : 0;
+}
+
+// REMOCAO
+
+static inline
+void remove_no(node_t **no_ptr) {
+    node_t *no = *no_ptr;
+
+    while (no->esq != NULL || no->dir != NULL) {
+        if (prioridade(no->esq) > prioridade(no->dir)) {
+            *no_ptr = rotaciona_dir(no);
+            no_ptr = &(*no_ptr)->esq;
+        } else {
+            *no_ptr = rotaciona_esq(no);
+            no_ptr = &(*no_ptr)->dir;
+        }
+    }
+    free(no);
+    *no_ptr = NULL;
+}
+
+int treap_remove(struct treap *arvore, chave_t chave) {
+    node_t **no_ptr = busca_no(arvore->raiz, chave);
+    if unlikely(*no_ptr == NULL) return -1;
+
+    remove_no(no_ptr);
+    return 0;
 }
