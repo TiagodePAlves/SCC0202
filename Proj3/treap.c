@@ -1,4 +1,5 @@
 #include "treap.h"
+#include "vec.h"
 #include <stdlib.h>
 
 
@@ -155,3 +156,67 @@ bool treap_remove(struct treap *arvore, chave_t chave) {
 }
 
 // PERCURSO
+
+typedef void callback_t(chave_t, priority_t);
+
+#define INI_CAP 1024ULL
+
+static inline attribute(hot)
+void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
+    if (no == NULL) return;
+
+    struct vec vetor = vec_init(INI_CAP);
+    vec_push_back(&vetor, no);
+
+    while ((no = vec_pop_back(&vetor)) != NULL) {
+        while ((pre? no->esq : no->dir) != NULL) {
+            vec_push_back(&vetor, no);
+            no = pre? no->esq : no->dir;
+        }
+        op(no->chave, no->pri);
+
+        if ((pre? no->dir : no->esq) != NULL) {
+            vec_push_back(&vetor, pre? no->dir : no->esq);
+        }
+    }
+    vec_dealloc(&vetor);
+}
+
+static inline attribute(hot)
+void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
+    if (no == NULL) return;
+
+    struct vec vetor = vec_init(INI_CAP);
+    vec_push_back(&vetor, no);
+
+    while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL) {
+        op(no->chave, no->pri);
+
+        if (no->esq != NULL) {
+            vec_push_back(&vetor, no->esq);
+        }
+        if (no->dir != NULL) {
+            vec_push_back(&vetor, no->dir);
+        }
+    }
+    vec_dealloc(&vetor);
+}
+
+void treap_percorre(const struct treap *arvore, void (*callback)(chave_t, priority_t), enum ordem ordem) {
+    switch (ordem) {
+        case PREORDEM:
+            percorre_pre_pos(arvore, callback, true);
+            break;
+        case ORDEM:
+            percorre_prof_larg(arvore, callback, true);
+            break;
+        case POSORDEM:
+            percorre_pre_pos(arvore, callback, false);
+            break;
+        case LARGURA:
+            percorre_prof_larg(arvore, callback, false);
+            break;
+        default:
+            break;
+    }
+}
