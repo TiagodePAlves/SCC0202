@@ -41,11 +41,11 @@ static inline
 priority_t random_pri(void) {
     static bool init = false;
     if unlikely(!init) {
-        srandom(ricks());
+        srandom(ticks());
         init = true;
     }
 
-    const long MASK = (1 << 31) - 1;
+    const long MASK = (1L << 31) - 1;
     uint32_t lo = random() & MASK;
     uint32_t hi = random();
 
@@ -89,8 +89,8 @@ void treap_dealloc(struct treap *arvore) {
 // BUSCA
 
 static inline
-const node_t **busca_no(const node_t **no_ptr, chave_t chave) {
-    const node_t *no = *no_ptr;
+node_t **busca_no(node_t **no_ptr, chave_t chave) {
+    node_t *no = *no_ptr;
     while (no != NULL && no->chave != chave) {
         if (no->chave > chave) {
             no_ptr = &no->esq;
@@ -104,7 +104,7 @@ const node_t **busca_no(const node_t **no_ptr, chave_t chave) {
 }
 
 bool treap_busca(const struct treap *arvore, chave_t chave) {
-    const node_t *no = *busca_no(&arvore->raiz, chave);
+    const node_t *no = *busca_no((node_t **) &arvore->raiz, chave);
     return no != NULL;
 }
 
@@ -185,7 +185,7 @@ void remove_no(node_t **no_ptr) {
 }
 
 int treap_remove(struct treap *arvore, chave_t chave) {
-    node_t **no_ptr = busca_no(arvore->raiz, chave);
+    node_t **no_ptr = busca_no(&arvore->raiz, chave);
     if unlikely(*no_ptr == NULL) return -1;
 
     remove_no(no_ptr);
