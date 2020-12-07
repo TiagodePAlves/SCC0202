@@ -22,12 +22,12 @@ void vec_push_front(struct vec *restrict vetor, void *data)
 attribute(nonnull, hot, leaf, nothrow);
 
 void vec_push_back(struct vec *restrict vetor, void *data)
-attribute(nonnull, hot, leaf, nothrow);;
+attribute(nonnull, hot, leaf, nothrow);
 
 void *vec_pop_front(struct vec *vetor)
-attribute(nonnull, hot, leaf, nothrow);;
+attribute(nonnull, hot, leaf, nothrow);
 
 void *vec_pop_back(struct vec *vetor)
-attribute(nonnull, hot, leaf, nothrow);;
+attribute(nonnull, hot, leaf, nothrow);
 
 #endif //__VEC_H__

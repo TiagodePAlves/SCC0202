@@ -12,7 +12,12 @@
 
 static inline
 void read_stdin(bool num, void *data) {
-    int rv = scanf(num? "%llu" : "%127s", data);
+    int rv;
+    if (num) {
+        rv = scanf("%llu", (unsigned long long *) data);
+    } else {
+        rv = scanf("%127s", (char *) data);
+    }
     // problemas de leitura
     if (rv < 0) {
         perror("treap");
@@ -39,6 +44,7 @@ static inline
 uint64_t read_num(void) {
     long long unsigned num;
     read_stdin(true, &num);
+    return num;
 }
 
 static inline
@@ -46,7 +52,7 @@ enum opcode read_op(void) {
     char str_op[128];
     read_stdin(false, str_op);
 
-    const char op[] = {"insercao", "remocao", "buscar", "impressao"};
+    const char *op[] = {"insercao", "remocao", "buscar", "impressao"};
     const enum opcode code[] = {INSERCAO, REMOCAO, BUSCAR, IMPRESSAO};
     const size_t len = sizeof(code) / sizeof(code[0]);
 
@@ -64,7 +70,7 @@ enum ordem read_ordem(void) {
     char str_op[128];
     read_stdin(false, str_op);
 
-    const char op[] = {"ordem", "posordem", "preordem", "largura"};
+    const char *op[] = {"ordem", "posordem", "preordem", "largura"};
     const enum ordem code[] = {ORDEM, POSORDEM, PREORDEM, LARGURA};
     const size_t len = sizeof(code) / sizeof(code[0]);
 

@@ -12,7 +12,7 @@ CFLAGS ?= -std=gnu11 $(WARNINGS) $(DEBUG) -O$(LEVEL) $(OPTFL)
 PROG := main
 LAB  := P3
 # SOURCE
-SRC := main.c treap.c
+SRC := main.c treap.c vec.c
 HEADERS := $(wildcard *.h)
 
 # GENERAL COMMANDS

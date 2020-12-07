@@ -164,17 +164,17 @@ typedef void callback_t(chave_t, priority_t);
 static inline attribute(nonnull, hot)
 void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
     struct vec vetor = vec_init(INI_CAP);
-    vec_push_back(&vetor, no);
+    vec_push_back(&vetor, (void *) no);
 
     while ((no = vec_pop_back(&vetor)) != NULL) {
         while ((pre? no->esq : no->dir) != NULL) {
-            vec_push_back(&vetor, no);
+            vec_push_back(&vetor, (void *) no);
             no = pre? no->esq : no->dir;
         }
         op(no->chave, no->pri);
 
         if ((pre? no->dir : no->esq) != NULL) {
-            vec_push_back(&vetor, pre? no->dir : no->esq);
+            vec_push_back(&vetor, (void *) pre? no->dir : no->esq);
         }
     }
     vec_dealloc(&vetor);
@@ -183,16 +183,16 @@ void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
 static inline attribute(nonnull, hot)
 void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
     struct vec vetor = vec_init(INI_CAP);
-    vec_push_back(&vetor, no);
+    vec_push_back(&vetor, (void *) no);
 
     while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL) {
         op(no->chave, no->pri);
 
         if (no->esq != NULL) {
-            vec_push_back(&vetor, no->esq);
+            vec_push_back(&vetor, (void *) no->esq);
         }
         if (no->dir != NULL) {
-            vec_push_back(&vetor, no->dir);
+            vec_push_back(&vetor, (void *) no->dir);
         }
     }
     vec_dealloc(&vetor);
