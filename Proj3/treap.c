@@ -13,10 +13,13 @@ struct node {
 
 // INIT
 
-static inline attribute(malloc)
+static inline attribute(returns_nonnull)
 node_t *node_alloc(chave_t chave, priority_t prio) {
     node_t *no = malloc(sizeof(node_t));
-    if unlikely(no == NULL) return NULL;
+    if unlikely(no == NULL) {
+        exit(EXIT_FAILURE);
+        return NULL;
+    };
 
     no->chave = chave;
     no->pri = prio;
@@ -118,10 +121,10 @@ node_t *insere_chave(node_t *no, chave_t chave, priority_t prio) {
     return no;
 }
 
-int treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
+bool treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
     erro = false;
     arvore->raiz = insere_chave(arvore->raiz, chave, prio);
-    return erro? -1 : 0;
+    return erro;
 }
 
 // REMOCAO
@@ -143,10 +146,12 @@ void remove_no(node_t **no_ptr) {
     *no_ptr = NULL;
 }
 
-int treap_remove(struct treap *arvore, chave_t chave) {
+bool treap_remove(struct treap *arvore, chave_t chave) {
     node_t **no_ptr = busca_no(&arvore->raiz, chave);
-    if unlikely(*no_ptr == NULL) return -1;
+    if unlikely(*no_ptr == NULL) return false;
 
     remove_no(no_ptr);
-    return 0;
+    return true;
 }
+
+// PERCURSO
