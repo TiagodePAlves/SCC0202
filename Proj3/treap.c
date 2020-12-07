@@ -14,7 +14,7 @@ struct node {
 
 // INIT
 
-static inline attribute(returns_nonnull)
+static inline attribute(returns_nonnull, hot, nothrow)
 node_t *node_alloc(chave_t chave, priority_t prio) {
     node_t *no = malloc(sizeof(node_t));
     if unlikely(no == NULL) {
@@ -28,7 +28,7 @@ node_t *node_alloc(chave_t chave, priority_t prio) {
     return no;
 }
 
-static inline
+static inline attribute(nonnull, cold, nothrow)
 void node_dealloc(node_t *no) {
     node_t *esq = no->esq;
     node_t *dir = no->dir;
@@ -51,7 +51,7 @@ void treap_dealloc(struct treap *arvore) {
 
 // BUSCA
 
-static inline
+static inline attribute(pure, nonnull, returns_nonnull, hot, nothrow)
 node_t **busca_no(node_t **no_ptr, chave_t chave) {
     node_t *no = *no_ptr;
     while (no != NULL && no->chave != chave) {
@@ -73,7 +73,7 @@ bool treap_busca(const struct treap *arvore, chave_t chave) {
 
 // INSERCAO
 
-static inline
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
 node_t *rotaciona_esq(node_t *no) {
     node_t *dir = no->dir;
     no->dir = dir->esq;
@@ -81,7 +81,7 @@ node_t *rotaciona_esq(node_t *no) {
     return dir;
 }
 
-static inline
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
 node_t *rotaciona_dir(node_t *no) {
     node_t *esq = no->esq;
     no->esq = esq->dir;
@@ -91,14 +91,14 @@ node_t *rotaciona_dir(node_t *no) {
 
 #define MIN_PRIO 0
 
-static inline
+static inline attribute(pure, hot, nothrow)
 priority_t prioridade(const node_t *no) {
     return (no != NULL)? no->pri : MIN_PRIO;
 }
 
 static bool erro;
 
-static inline
+static inline attribute(hot, nothrow)
 node_t *insere_chave(node_t *no, chave_t chave, priority_t prio) {
     if (no == NULL) {
         node_t *novo = node_alloc(chave, prio);
@@ -130,7 +130,7 @@ bool treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
 
 // REMOCAO
 
-static inline
+static inline attribute(nonnull, hot, nothrow)
 void remove_no(node_t **no_ptr) {
     node_t *no = *no_ptr;
 
@@ -161,10 +161,8 @@ typedef void callback_t(chave_t, priority_t);
 
 #define INI_CAP 1024ULL
 
-static inline attribute(hot)
+static inline attribute(nonnull, hot)
 void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
-    if (no == NULL) return;
-
     struct vec vetor = vec_init(INI_CAP);
     vec_push_back(&vetor, no);
 
@@ -182,10 +180,8 @@ void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
     vec_dealloc(&vetor);
 }
 
-static inline attribute(hot)
+static inline attribute(nonnull, hot)
 void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
-    if (no == NULL) return;
-
     struct vec vetor = vec_init(INI_CAP);
     vec_push_back(&vetor, no);
 
@@ -203,18 +199,20 @@ void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
 }
 
 void treap_percorre(const struct treap *arvore, void (*callback)(chave_t, priority_t), enum ordem ordem) {
+    if (arvore->raiz == NULL) return;
+
     switch (ordem) {
         case PREORDEM:
-            percorre_pre_pos(arvore, callback, true);
+            percorre_pre_pos(arvore->raiz, callback, true);
             break;
         case ORDEM:
-            percorre_prof_larg(arvore, callback, true);
+            percorre_prof_larg(arvore->raiz, callback, true);
             break;
         case POSORDEM:
-            percorre_pre_pos(arvore, callback, false);
+            percorre_pre_pos(arvore->raiz, callback, false);
             break;
         case LARGURA:
-            percorre_prof_larg(arvore, callback, false);
+            percorre_prof_larg(arvore->raiz, callback, false);
             break;
         default:
             break;

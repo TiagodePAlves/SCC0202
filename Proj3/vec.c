@@ -18,7 +18,7 @@ void vec_dealloc(struct vec *vetor) {
     free(vetor->data);
 }
 
-static inline attribute(nonnull, cold, leaf, nothrow)
+static inline attribute(nonnull, cold, nothrow)
 void vec_aumenta(struct vec *vetor) {
     void **data = reallocarray(vetor->data, 2 * vetor->cap, sizeof(void *));
     if unlikely(data == NULL) exit(EXIT_FAILURE);
