@@ -13,6 +13,8 @@ struct node {
 };
 
 
+// INIT
+
 static inline
 uint64_t random_pri(void) {
     uint32_t lo = random();
@@ -53,4 +55,23 @@ void treap_dealloc(struct treap *arvore) {
         node_dealloc(arvore->raiz);
         arvore->raiz = NULL;
     }
+}
+
+// BUSCA
+
+static inline
+bool node_busca(const node_t *no, chave_t chave) {
+    if (no == NULL) {
+        return false;
+    } else if (no->chave == chave) {
+        return true;
+    } else if (no->chave > chave) {
+        return node_busca(no->esq, chave);
+    } else {
+        return node_busca(no->dir, chave);
+    }
+}
+
+bool treap_busca(const struct treap *arvore, chave_t chave) {
+    return node_busca(arvore->raiz, chave);
 }
