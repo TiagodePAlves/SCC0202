@@ -4,6 +4,7 @@
 #include "utils.h"
 
 typedef uint64_t chave_t;
+typedef uint64_t priority_t;
 
 struct treap {
     struct node *raiz;
@@ -13,7 +14,7 @@ struct treap treap_nova(void);
 
 void treap_dealloc(struct treap *arvore);
 
-int treap_insere(struct treap *arvore, chave_t chave);
+int treap_insere(struct treap *arvore, chave_t chave, priority_t prio);
 
 bool treap_busca(const struct treap *arvore, chave_t chave);
 

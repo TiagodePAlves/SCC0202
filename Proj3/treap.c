@@ -2,10 +2,8 @@
 #include <stdlib.h>
 
 
-typedef uint64_t priority_t;
 
 typedef struct node node_t;
-
 struct node {
     chave_t chave;
     priority_t pri;
@@ -15,52 +13,13 @@ struct node {
 
 // INIT
 
-static inline
-/**
- * Quantidade de ticks desde que a máquina foi ligada.
- *
- * Serve como um marcador de "tempo" sem a <time.h>,
- * mas é dependente da arquitetura.
- */
-uint64_t ticks(void) {
-    // ReaD TimeStamp Counter
-    asm("rdtsc");
-    // o resultado da instrução acima é
-    // guardado nos registradores EAX e EDX
-    register uint32_t lo asm("eax");
-    register uint32_t hi asm("edx");
-
-    // que devem então ser combinados
-    // em um inteiro de 64 bits
-    uint64_t low = (uint64_t) lo;
-    uint64_t high = (uint64_t) hi;
-    return (high << 32) | low;
-}
-
-static inline
-priority_t random_pri(void) {
-    static bool init = false;
-    if unlikely(!init) {
-        srandom(ticks());
-        init = true;
-    }
-
-    const long MASK = (1L << 31) - 1;
-    uint32_t lo = random() & MASK;
-    uint32_t hi = random();
-
-    uint64_t ans = hi;
-    ans = (ans << 32) | (lo + 1);
-    return ans;
-}
-
-static inline
-node_t *node_alloc(chave_t chave) {
+static inline attribute(malloc)
+node_t *node_alloc(chave_t chave, priority_t prio) {
     node_t *no = malloc(sizeof(node_t));
     if unlikely(no == NULL) return NULL;
 
     no->chave = chave;
-    no->pri = random_pri();
+    no->pri = prio;
     no->esq = no->dir = NULL;
     return no;
 }
@@ -136,20 +95,20 @@ priority_t prioridade(const node_t *no) {
 static bool erro;
 
 static inline
-node_t *insere_chave(node_t *no, chave_t chave) {
+node_t *insere_chave(node_t *no, chave_t chave, priority_t prio) {
     if (no == NULL) {
-        node_t *novo = node_alloc(chave);
+        node_t *novo = node_alloc(chave, prio);
         erro = (novo == NULL);
         return novo;
     }
 
     if (no->chave > chave) {
-        no->esq = insere_chave(no->esq, chave);
+        no->esq = insere_chave(no->esq, chave, prio);
         if (prioridade(no->esq) > no->pri) {
             no = rotaciona_dir(no);
         }
     } else if (no->chave < chave) {
-        no->dir = insere_chave(no->dir, chave);
+        no->dir = insere_chave(no->dir, chave, prio);
         if (prioridade(no->dir) > no->pri) {
             no = rotaciona_esq(no);
         }
@@ -159,9 +118,9 @@ node_t *insere_chave(node_t *no, chave_t chave) {
     return no;
 }
 
-int treap_insere(struct treap *arvore, chave_t chave) {
+int treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
     erro = false;
-    arvore->raiz = insere_chave(arvore->raiz, chave);
+    arvore->raiz = insere_chave(arvore->raiz, chave, prio);
     return erro? -1 : 0;
 }
 
