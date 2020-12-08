@@ -174,12 +174,17 @@ static inline attribute(pure, nonnull, returns_nonnull, hot, nothrow)
  */
 node_t **busca_no(node_t **no_ptr, chave_t chave) {
     node_t *no = *no_ptr;
+    // até achar uma folha ou um nó com a chave
     while (no != NULL && no->chave != chave) {
         if (no->chave > chave) {
+            // endereço do próximo nó
             no_ptr = &no->esq;
+            // próximo nó
             no = no->esq;
         } else {
+            // endereço do próximo nó
             no_ptr = &no->dir;
+            // próximo nó
             no = no->dir;
         }
     }
@@ -194,29 +199,47 @@ bool treap_busca(const struct treap *arvore, chave_t chave) {
     return no != NULL;
 }
 
-// REMOCAO
+
+/* * * * * *
+ * REMOÇÃO *
+ * * * * * */
 
 static inline attribute(nonnull, hot, nothrow)
+/**
+ * Remove o nó na raiz da subárvore, mantendo as propriedades.
+ *
+ * Recebe um ponteiro onde a raiz da árvore está alocada. A nova raiz será
+ * escrita nele novamente.
+ */
 void remove_no(node_t **no_ptr) {
     node_t *no = *no_ptr;
-
+    // até o nó ser uma folha
     while (no->esq != NULL || no->dir != NULL) {
+        // rotaciona para que o filho com maior prioridade
+        // seja a nova raiz
         if (prioridade(no->esq) > prioridade(no->dir)) {
+            // muda a raiz
             *no_ptr = rotaciona_dir(no);
+            // novo local do nó
             no_ptr = &(*no_ptr)->dir;
         } else {
+            // muda a raiz
             *no_ptr = rotaciona_esq(no);
+            // novo local do nó
             no_ptr = &(*no_ptr)->esq;
         }
     }
+    // libera o nó e repõe a folha
     free(no);
     *no_ptr = NULL;
 }
 
+// Remoção da chave
 bool treap_remove(struct treap *arvore, chave_t chave) {
+    // busca nó com chave
     node_t **no_ptr = busca_no(&arvore->raiz, chave);
     if unlikely(*no_ptr == NULL) return false;
-
+    // e remove ele da sua subárvore
     remove_no(no_ptr);
     return true;
 }
