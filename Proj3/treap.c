@@ -160,9 +160,18 @@ bool treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
     return existe;
 }
 
-// BUSCA
+
+/* * * * *
+ * BUSCA *
+ * * * * */
 
 static inline attribute(pure, nonnull, returns_nonnull, hot, nothrow)
+/**
+ * Busca de um nó considerando a propriedade de ABB.
+ *
+ * Recebe um ponteiro onde a raiz da árvore está alocada e retorna um ponteiro
+ * onde um nó com aquela chave aparece ou deveria aparecer.
+ */
 node_t **busca_no(node_t **no_ptr, chave_t chave) {
     node_t *no = *no_ptr;
     while (no != NULL && no->chave != chave) {
@@ -177,8 +186,11 @@ node_t **busca_no(node_t **no_ptr, chave_t chave) {
     return no_ptr;
 }
 
+// Busca por chave
 bool treap_busca(const struct treap *arvore, chave_t chave) {
+    // cast sem const, mas a árvore ainda não será alterada
     const node_t *no = *busca_no((node_t **) &arvore->raiz, chave);
+    // teste se não tem nenhum nó com aquela chave
     return no != NULL;
 }
 
