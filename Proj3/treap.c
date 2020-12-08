@@ -169,7 +169,7 @@ void percorre_ord_pos(const node_t *no, callback_t *op, bool ord) {
     if (!ord) op(no->chave, no->pri);
 }
 
-#define INI_CAP 1024ULL
+#define INI_CAP 256ULL
 
 static inline attribute(hot)
 void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
