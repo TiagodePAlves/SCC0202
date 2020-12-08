@@ -234,7 +234,7 @@ void remove_no(node_t **no_ptr) {
     *no_ptr = NULL;
 }
 
-static inline attribute(nonnull, hot, nothrow)
+static inline attribute(nonnull, hot, nothrow, unused)
 /**
  * Remove o nó na raiz da subárvore, rotacionando apenas para a esquerda.
  *
@@ -242,16 +242,17 @@ static inline attribute(nonnull, hot, nothrow)
  */
 void remove_no_rotesq(node_t **no_ptr) {
     node_t *no = *no_ptr;
-    // até o nó ser uma folha
-    while (no->esq != NULL || no->dir != NULL) {
+    // até o nó não ter filho direito
+    while (no->dir != NULL) {
         // muda a raiz
         *no_ptr = rotaciona_esq(no);
         // novo local do nó
         no_ptr = &(*no_ptr)->esq;
     }
-    // libera o nó e repõe a folha
+    // coloca o filho esquerdo no lugar
+    *no_ptr = no->esq;
+    // e remove o nó
     free(no);
-    *no_ptr = NULL;
 }
 
 // Remoção da chave
