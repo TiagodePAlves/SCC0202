@@ -244,43 +244,64 @@ bool treap_remove(struct treap *arvore, chave_t chave) {
     return true;
 }
 
-// PERCURSO
 
+/* * * * * * * * *
+ * PERCORRIMENTO *
+ * * * * * * * * */
+
+// Tipo para as funções chamadas no percorrimento.
 typedef void callback_t(chave_t, priority_t);
 
 static inline attribute(hot)
+/**
+ * Percorre em ordem (`ord == true`) ou pós ordem (`ord == false`).
+ *
+ * Implementado de forma recursiva.
+ */
 void percorre_ord_pos(const node_t *no, callback_t *op, bool ord) {
     if (no == NULL) return;
 
     percorre_ord_pos(no->esq, op, ord);
+    // em ordem: pai depois do filho esquerdo
     if (ord) op(no->chave, no->pri);
     percorre_ord_pos(no->dir, op, ord);
+    // pós ordem: pai depois dos filhos
     if (!ord) op(no->chave, no->pri);
 }
 
+// Capacidade incial da pilha/fila
 #define INI_CAP 256ULL
 
 static inline attribute(hot)
+/**
+ * Percorre em pré ordem (`prof == true`) ou largura (`prof == false`).
+ *
+ * Implementado com uma pilha ou uma fila.
+ */
 void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
     if (no == NULL) return;
 
+    // vetor com os nós, usado como pilha (pré ordem) ou fila (largura)
     struct vec vetor = vec_init(INI_CAP);
     do {
         op(no->chave, no->pri);
+        // pŕoximo o nó a ser inserido na pilha/fila
         node_t *pri = prof? no->dir : no->esq;
-        node_t *seg = prof? no->esq : no->dir;
-
         if (pri != NULL) {
             vec_push_back(&vetor, (void *) pri);
         }
+        // nó seguinte (segundo nó) a ser inserido
+        node_t *seg = prof? no->esq : no->dir;
         if (seg != NULL) {
             vec_push_back(&vetor, (void *) seg);
         }
+    // próximo nó da pilha ou fila, até acabar o vetor
     } while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL);
 
     vec_dealloc(&vetor);
 }
 
+// Percorre
 void treap_percorre(const struct treap *arvore, void (*callback)(chave_t, priority_t), enum ordem ordem) {
     switch (ordem) {
         case PREORDEM:
