@@ -159,33 +159,24 @@ bool treap_remove(struct treap *arvore, chave_t chave) {
 
 typedef void callback_t(chave_t, priority_t);
 
-#define INI_CAP 1024ULL
+static inline attribute(hot)
+void percorre_ord_pos(const node_t *no, callback_t *op, bool ord) {
+    if (no == NULL) return;
 
-static inline attribute(nonnull, hot)
-void percorre_pre_pos(const node_t *no, callback_t *op, bool pre) {
-    struct vec vetor = vec_init(INI_CAP);
-    vec_push_back(&vetor, (void *) no);
-
-    while ((no = vec_pop_back(&vetor)) != NULL) {
-        while ((pre? no->esq : no->dir) != NULL) {
-            vec_push_back(&vetor, (void *) no);
-            no = pre? no->esq : no->dir;
-        }
-        op(no->chave, no->pri);
-
-        if ((pre? no->dir : no->esq) != NULL) {
-            vec_push_back(&vetor, (void *) pre? no->dir : no->esq);
-        }
-    }
-    vec_dealloc(&vetor);
+    percorre_ord_pos(no->esq, op, ord);
+    if (ord) op(no->chave, no->pri);
+    percorre_ord_pos(no->dir, op, ord);
+    if (!ord) op(no->chave, no->pri);
 }
 
-static inline attribute(nonnull, hot)
-void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
-    struct vec vetor = vec_init(INI_CAP);
-    vec_push_back(&vetor, (void *) no);
+#define INI_CAP 1024ULL
 
-    while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL) {
+static inline attribute(hot)
+void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
+    if (no == NULL) return;
+
+    struct vec vetor = vec_init(INI_CAP);
+    do {
         op(no->chave, no->pri);
 
         if (no->esq != NULL) {
@@ -194,7 +185,8 @@ void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
         if (no->dir != NULL) {
             vec_push_back(&vetor, (void *) no->dir);
         }
-    }
+    } while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL);
+
     vec_dealloc(&vetor);
 }
 
@@ -203,13 +195,13 @@ void treap_percorre(const struct treap *arvore, void (*callback)(chave_t, priori
 
     switch (ordem) {
         case PREORDEM:
-            percorre_pre_pos(arvore->raiz, callback, true);
+            percorre_ord_pos(arvore->raiz, callback, true);
             break;
         case ORDEM:
             percorre_prof_larg(arvore->raiz, callback, true);
             break;
         case POSORDEM:
-            percorre_pre_pos(arvore->raiz, callback, false);
+            percorre_ord_pos(arvore->raiz, callback, false);
             break;
         case LARGURA:
             percorre_prof_larg(arvore->raiz, callback, false);
