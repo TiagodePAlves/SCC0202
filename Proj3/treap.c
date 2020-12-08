@@ -71,6 +71,95 @@ void treap_dealloc(struct treap *arvore) {
     }
 }
 
+
+/* * * * * * *
+ * INSERÇÃO  *
+ * * * * * * */
+
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
+/**
+ * Rotação à esquerda.
+ *
+ * Mantém a propriedade de ABB, mas pode alterar o heap.
+ */
+node_t *rotaciona_esq(node_t *no) {
+    node_t *dir = no->dir;
+    no->dir = dir->esq;
+    dir->esq = no;
+    return dir;
+}
+
+static inline attribute(nonnull, returns_nonnull, hot, nothrow)
+/**
+ * Rotação à direita.
+ *
+ * Mantém a propriedade de ABB, mas pode alterar o heap.
+ */
+node_t *rotaciona_dir(node_t *no) {
+    node_t *esq = no->esq;
+    no->esq = esq->dir;
+    esq->dir = no;
+    return esq;
+}
+
+// Prioridade mínima possível
+#define MIN_PRIO 0
+
+static inline attribute(pure, hot, nothrow)
+/**
+ * Prioridade de um nó ou folha.
+ */
+priority_t prioridade(const node_t *no) {
+    // folhas tem prioridade mínima
+    return (no != NULL)? no->pri : MIN_PRIO;
+}
+
+// Marcador de chave já existente.
+static bool existe;
+
+static inline attribute(hot, nothrow)
+/**
+ * Insere novo nó na subárvore com raiz em nó e retorna nova raiz.
+ *
+ * Mantém a proriedade de ABB em toda a árvore e a de heap pelo menos na
+ * subárvore.
+ */
+node_t *insere_chave(node_t *no, chave_t chave, priority_t prio) {
+    // insere nó no lugar da folha
+    if (no == NULL) {
+        return node_alloc(chave, prio);
+    }
+
+    // inserção mantendo ABB
+    if (no->chave > chave) {
+        no->esq = insere_chave(no->esq, chave, prio);
+        // rotação para manter o heap
+        if (prioridade(no->esq) > no->pri) {
+            no = rotaciona_dir(no);
+        }
+    } else if (no->chave < chave) {
+        no->dir = insere_chave(no->dir, chave, prio);
+        // rotação para manter o heap
+        if (prioridade(no->dir) > no->pri) {
+            no = rotaciona_esq(no);
+        }
+    } else {
+        // chave encontrada na árvore
+        existe = true;
+    }
+    return no;
+}
+
+// Inserção na árvore.
+bool treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
+    // marca como inexistente
+    existe = false;
+    // insere pela raiz
+    arvore->raiz = insere_chave(arvore->raiz, chave, prio);
+    // retorna o marcador, que pode ter sido alterado
+    return existe;
+}
+
 // BUSCA
 
 static inline attribute(pure, nonnull, returns_nonnull, hot, nothrow)
@@ -91,63 +180,6 @@ node_t **busca_no(node_t **no_ptr, chave_t chave) {
 bool treap_busca(const struct treap *arvore, chave_t chave) {
     const node_t *no = *busca_no((node_t **) &arvore->raiz, chave);
     return no != NULL;
-}
-
-// INSERCAO
-
-static inline attribute(nonnull, returns_nonnull, hot, nothrow)
-node_t *rotaciona_esq(node_t *no) {
-    node_t *dir = no->dir;
-    no->dir = dir->esq;
-    dir->esq = no;
-    return dir;
-}
-
-static inline attribute(nonnull, returns_nonnull, hot, nothrow)
-node_t *rotaciona_dir(node_t *no) {
-    node_t *esq = no->esq;
-    no->esq = esq->dir;
-    esq->dir = no;
-    return esq;
-}
-
-#define MIN_PRIO 0
-
-static inline attribute(pure, hot, nothrow)
-priority_t prioridade(const node_t *no) {
-    return (no != NULL)? no->pri : MIN_PRIO;
-}
-
-static bool erro;
-
-static inline attribute(hot, nothrow)
-node_t *insere_chave(node_t *no, chave_t chave, priority_t prio) {
-    if (no == NULL) {
-        node_t *novo = node_alloc(chave, prio);
-        erro = (novo == NULL);
-        return novo;
-    }
-
-    if (no->chave > chave) {
-        no->esq = insere_chave(no->esq, chave, prio);
-        if (prioridade(no->esq) > no->pri) {
-            no = rotaciona_dir(no);
-        }
-    } else if (no->chave < chave) {
-        no->dir = insere_chave(no->dir, chave, prio);
-        if (prioridade(no->dir) > no->pri) {
-            no = rotaciona_esq(no);
-        }
-    } else {
-        erro = true;
-    }
-    return no;
-}
-
-bool treap_insere(struct treap *arvore, chave_t chave, priority_t prio) {
-    erro = false;
-    arvore->raiz = insere_chave(arvore->raiz, chave, prio);
-    return erro;
 }
 
 // REMOCAO
