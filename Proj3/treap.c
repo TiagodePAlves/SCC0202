@@ -137,10 +137,10 @@ void remove_no(node_t **no_ptr) {
     while (no->esq != NULL || no->dir != NULL) {
         if (prioridade(no->esq) > prioridade(no->dir)) {
             *no_ptr = rotaciona_dir(no);
-            no_ptr = &(*no_ptr)->esq;
+            no_ptr = &(*no_ptr)->dir;
         } else {
             *no_ptr = rotaciona_esq(no);
-            no_ptr = &(*no_ptr)->dir;
+            no_ptr = &(*no_ptr)->esq;
         }
     }
     free(no);
@@ -178,12 +178,14 @@ void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
     struct vec vetor = vec_init(INI_CAP);
     do {
         op(no->chave, no->pri);
+        node_t *pri = prof? no->dir : no->esq;
+        node_t *seg = prof? no->esq : no->dir;
 
-        if (no->esq != NULL) {
-            vec_push_back(&vetor, (void *) no->esq);
+        if (pri != NULL) {
+            vec_push_back(&vetor, (void *) pri);
         }
-        if (no->dir != NULL) {
-            vec_push_back(&vetor, (void *) no->dir);
+        if (seg != NULL) {
+            vec_push_back(&vetor, (void *) seg);
         }
     } while ((no = prof? vec_pop_back(&vetor) : vec_pop_front(&vetor)) != NULL);
 
@@ -191,14 +193,12 @@ void percorre_prof_larg(const node_t *no, callback_t *op, bool prof) {
 }
 
 void treap_percorre(const struct treap *arvore, void (*callback)(chave_t, priority_t), enum ordem ordem) {
-    if (arvore->raiz == NULL) return;
-
     switch (ordem) {
         case PREORDEM:
-            percorre_ord_pos(arvore->raiz, callback, true);
+            percorre_prof_larg(arvore->raiz, callback, true);
             break;
         case ORDEM:
-            percorre_prof_larg(arvore->raiz, callback, true);
+            percorre_ord_pos(arvore->raiz, callback, true);
             break;
         case POSORDEM:
             percorre_ord_pos(arvore->raiz, callback, false);
