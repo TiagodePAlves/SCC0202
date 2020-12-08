@@ -32,7 +32,7 @@ static inline attribute(nonnull, cold, nothrow)
  * Duplica a capacidade do vetor.
  */
 void vec_aumenta(struct vec *vetor) {
-    void **data = reallocarray(vetor->data, 2 * vetor->cap, sizeof(void *));
+    void **data = realloc(vetor->data, 2 * vetor->cap * sizeof(void *));
     // erro de alocação
     if unlikely(data == NULL) exit(EXIT_FAILURE);
 
