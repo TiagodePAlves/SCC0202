@@ -204,7 +204,7 @@ bool treap_busca(const struct treap *arvore, chave_t chave) {
  * REMOÇÃO *
  * * * * * */
 
-static inline attribute(nonnull, hot, nothrow)
+static inline attribute(nonnull, hot, nothrow, unused)
 /**
  * Remove o nó na raiz da subárvore, mantendo as propriedades.
  *
@@ -234,13 +234,33 @@ void remove_no(node_t **no_ptr) {
     *no_ptr = NULL;
 }
 
+static inline attribute(nonnull, hot, nothrow)
+/**
+ * Remove o nó na raiz da subárvore, rotacionando apenas para a esquerda.
+ *
+ * PODE QUEBRAR A PROPRIEDADE DO HEAP.
+ */
+void remove_no_rotesq(node_t **no_ptr) {
+    node_t *no = *no_ptr;
+    // até o nó ser uma folha
+    while (no->esq != NULL || no->dir != NULL) {
+        // muda a raiz
+        *no_ptr = rotaciona_esq(no);
+        // novo local do nó
+        no_ptr = &(*no_ptr)->esq;
+    }
+    // libera o nó e repõe a folha
+    free(no);
+    *no_ptr = NULL;
+}
+
 // Remoção da chave
 bool treap_remove(struct treap *arvore, chave_t chave) {
     // busca nó com chave
     node_t **no_ptr = busca_no(&arvore->raiz, chave);
     if unlikely(*no_ptr == NULL) return false;
     // e remove ele da sua subárvore
-    remove_no(no_ptr);
+    remove_no_rotesq(no_ptr);
     return true;
 }
 
