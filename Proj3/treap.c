@@ -1,10 +1,21 @@
 #include "treap.h"
 #include "vec.h"
 #include <stdlib.h>
-
+/**
+ *  Árvore Treap (Tree + Heap).
+ *
+ *  Os nós da árvore mantêm a propriedade de uma árvore binária de busca para
+ * as chaves presentes, em que os nós esquerdos devem ter chaves menores que o
+ * pai e os nós à direita devem ser maiores. Ao mesmo tempo, é mantida a
+ * propriedade do heap de máximo para a prioridade, é que um nó tem sempre
+ * prioridade maior que seus filhos.
+ */
 
 
 typedef struct node node_t;
+/**
+ * Estrutura de um nó.
+ */
 struct node {
     chave_t chave;
     priority_t pri;
@@ -12,11 +23,17 @@ struct node {
 };
 
 
-// INIT
+/* * * * * * * * * * *
+ * (DE)INICIALIZAÇÃO *
+ * * * * * * * * * * */
 
 static inline attribute(returns_nonnull, hot, nothrow)
+/**
+ * Alocação de um novo nó.
+ */
 node_t *node_alloc(chave_t chave, priority_t prio) {
     node_t *no = malloc(sizeof(node_t));
+    // erro de alocação
     if unlikely(no == NULL) {
         exit(EXIT_FAILURE);
         return NULL;
@@ -29,6 +46,9 @@ node_t *node_alloc(chave_t chave, priority_t prio) {
 }
 
 static inline attribute(nonnull, cold, nothrow)
+/**
+ * Desaloca o nó e seus filhos, recursivamente.
+ */
 void node_dealloc(node_t *no) {
     node_t *esq = no->esq;
     node_t *dir = no->dir;
@@ -38,10 +58,12 @@ void node_dealloc(node_t *no) {
     if (dir != NULL) node_dealloc(dir);
 }
 
+// Nova árvore vazia.
 struct treap treap_nova(void) {
     return (struct treap) {.raiz = NULL};
 }
 
+// Desaloca todos os nós da árvore.
 void treap_dealloc(struct treap *arvore) {
     if (arvore->raiz != NULL) {
         node_dealloc(arvore->raiz);
