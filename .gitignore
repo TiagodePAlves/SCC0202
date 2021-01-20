@@ -1,6 +1,7 @@
 .vscode/
 Lab*/main
 Proj*/main
+Rec/main
 *.o
 *.zip
 gmon.out
